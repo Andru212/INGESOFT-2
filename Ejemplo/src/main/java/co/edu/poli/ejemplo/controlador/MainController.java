@@ -182,7 +182,7 @@ private void ejecutarScriptSQL(Statement stmt, String nombreArchivo) {
         }
 
         br.close();
-        msg_alerta.setText("✅ Tablas creadas correctamente.");
+        msg_alerta.setText("✅ BD creada correctamente.");
     } catch (Exception e) {
         msg_alerta.setText("❌ Error al ejecutar script SQL: " + e.getMessage());
     }
