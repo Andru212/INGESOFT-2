@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -114,63 +115,69 @@ public class MainController {
     }    
     }
 
-    @FXML
-    void Crear_bd(ActionEvent event) {
-        String rutaSQL = "C:/Users/LENOVO-02500100/Desktop/Andres/UNI/INGESOFT-2/Scrip sql/BD_script.sql";
-        crearBaseDeDatos(rutaSQL);
-    }
-    
-    private void crearBaseDeDatos(String rutaArchivo) {
-        try {
-            ResourceBundle rd = ResourceBundle.getBundle("config");
-            String dbURL = rd.getString("db.server"); // Conexión al servidor, sin especificar BD
-            String dbUSERNAME = rd.getString("db.username");
-            String dbPASSWORD = rd.getString("db.password");
-    
-            Connection conn = DriverManager.getConnection(dbURL, dbUSERNAME, dbPASSWORD);
-            Statement stmt = conn.createStatement();
-    
-            // Intentar crear la base de datos
-            stmt.execute("CREATE DATABASE IF NOT EXISTS tienda;");
+ @FXML
+void Crear_bd(ActionEvent event) {
+    String rutaSQL = "C:/Users/LENOVO-02500100/Desktop/Andres/UNI/INGESOFT-2/Scrip sql/BD_script.sql";
+    crearBaseDeDatos(rutaSQL);
+}
+
+private void crearBaseDeDatos(String rutaArchivo) {
+    try {
+        ResourceBundle rd = ResourceBundle.getBundle("config");
+        String dbServer = rd.getString("db.server"); // Conexión sin BD específica
+        String dbUSERNAME = rd.getString("db.username");
+        String dbPASSWORD = rd.getString("db.password");
+
+        Connection conn = DriverManager.getConnection(dbServer, dbUSERNAME, dbPASSWORD);
+        Statement stmt = conn.createStatement();
+
+        // Verificar si la base de datos ya existe
+        ResultSet rs = stmt.executeQuery("SHOW DATABASES LIKE 'tienda';");
+        if (rs.next()) {
+            msg_alerta.setText("⚠ La base de datos ya existe.");
+        } else {
+            // Si no existe, crearla y ejecutar el script
+            stmt.execute("CREATE DATABASE tienda;");
             stmt.execute("USE tienda;");
-    
+            
             ejecutarScriptSQL(stmt, rutaArchivo);
-    
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            msg_alerta.setText("❌ Error al crear la base de datos: " + e.getMessage());
-            System.out.println(e.getMessage());
-        }
-    }
-    
-    private void ejecutarScriptSQL(Statement stmt, String rutaArchivo) {
-        try {
-            File sqlFile = new File(rutaArchivo);
-            if (!sqlFile.exists()) {
-                msg_alerta.setText("⚠ No se encontró el archivo SQL.");
-                return;
-            }
-    
-            BufferedReader br = new BufferedReader(new FileReader(sqlFile));
-            StringBuilder sqlQuery = new StringBuilder();
-            String line;
-    
-            while ((line = br.readLine()) != null) {
-                sqlQuery.append(line).append("\n");
-                if (line.trim().endsWith(";")) {
-                    stmt.execute(sqlQuery.toString());
-                    sqlQuery.setLength(0);
-                }
-            }
-    
-            br.close();
             msg_alerta.setText("✅ Base de datos creada correctamente.");
-        } catch (Exception e) {
-            msg_alerta.setText("❌ Error al ejecutar script SQL: " + e.getMessage());
         }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+    } catch (Exception e) {
+        msg_alerta.setText("❌ Error al crear la base de datos: " + e.getMessage());
     }
-    
+}
+
+private void ejecutarScriptSQL(Statement stmt, String rutaArchivo) {
+    try {
+        File sqlFile = new File(rutaArchivo);
+        if (!sqlFile.exists()) {
+            msg_alerta.setText("⚠ No se encontró el archivo SQL.");
+            return;
+        }
+
+        BufferedReader br = new BufferedReader(new FileReader(sqlFile));
+        StringBuilder sqlQuery = new StringBuilder();
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            sqlQuery.append(line).append("\n");
+            if (line.trim().endsWith(";")) {
+                stmt.execute(sqlQuery.toString());
+                sqlQuery.setLength(0);
+            }
+        }
+
+        br.close();
+    } catch (Exception e) {
+        msg_alerta.setText("❌ Error al ejecutar script SQL: " + e.getMessage());
+    }
+}
+
 
 
     private DAOCliente daoCliente;
