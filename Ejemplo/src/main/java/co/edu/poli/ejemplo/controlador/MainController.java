@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import javafx.util.Duration;
@@ -250,40 +251,47 @@ try {
         msg_alerta_cliente.setText("⚠️ Error al consultar cliente: " + e.getMessage());
     }
     }
-    @FXML
-    void ver_producto_all(ActionEvent event) {
-        try {
-            DAOProducto daoProducto = new DAOProducto();
-            List<Producto> listaProductos = daoProducto.readAll();
-    
-            if (listaProductos.isEmpty()) {
-                msg_alerta_producto.setText("⚠️ No hay productos registrados.");
-                return;
+@FXML
+void ver_producto_all(ActionEvent event) {
+    try {
+        DAOProducto daoProducto = new DAOProducto();
+        List<Producto> listaProductos = daoProducto.readAll();
+
+        if (listaProductos.isEmpty()) {
+            msg_alerta_producto.setText("⚠️ No hay productos registrados.");
+            return;
+        }
+
+        // Ordenar por ID numérico
+        listaProductos.sort(Comparator.comparing(p -> Integer.parseInt(p.getId())));
+
+        StringBuilder resultado = new StringBuilder();
+        for (Producto producto : listaProductos) {
+            if (producto instanceof ProductoAlimentos) {
+                ProductoAlimentos alimento = (ProductoAlimentos) producto;
+                resultado.append(alimento.toString())
+                        .append(" | Calorías: ")
+                        .append(alimento.getAporteCalorico()).append(" kcal\n");
+            } else if (producto instanceof ProductoElectronico) {
+                ProductoElectronico electronico = (ProductoElectronico) producto;
+                resultado.append(electronico.toString())
+                        .append(" | Voltaje: ")
+                        .append(electronico.getVoltajeEntrada()).append("V\n");
+            } else {
+                resultado.append(producto.toString()).append("\n"); // En caso de ser otro tipo
             }
-    
-            StringBuilder resultado = new StringBuilder();
-            for (Producto producto : listaProductos) {
-                if (producto instanceof ProductoAlimentos) {
-                    ProductoAlimentos alimento = (ProductoAlimentos) producto;
-                    resultado.append(alimento.toString())
-                            .append(" | Calorías: ")
-                            .append(alimento.getAporteCalorico()).append(" kcal\n");
-                } else if (producto instanceof ProductoElectronico) {
-                    ProductoElectronico electronico = (ProductoElectronico) producto;
-                    resultado.append(electronico.toString())
-                            .append(" | Voltaje: ")
-                            .append(electronico.getVoltajeEntrada()).append("V\n");
-                } else {
-                    resultado.append(producto.toString()).append("\n"); // En caso de ser otro tipo
-                }
-            }
-    
-            // Mostrar productos en el TextArea
-            Mostrar_productos.setText(resultado.toString());
-            msg_alerta_producto.setText(""); // Limpiar mensajes de error
-        } catch (Exception e) {
-            msg_alerta_producto.setText("⚠️ Error al obtener productos: " + e.getMessage());
-        }    }
+        }
+
+        // Mostrar productos en el TextArea
+        Mostrar_productos.setText(resultado.toString());
+        msg_alerta_producto.setText(""); // Limpiar mensajes de error
+    } catch (NumberFormatException e) {
+        msg_alerta_producto.setText("⚠️ Error: ID no válido en la lista.");
+    } catch (Exception e) {
+        msg_alerta_producto.setText("⚠️ Error al obtener productos: " + e.getMessage());
+    }
+}
+
     @FXML
     void crear_producto(ActionEvent event) {
  // Obtener datos de los campos de texto
@@ -365,7 +373,7 @@ try {
             txt_precioProducto.clear();
             voltaje_calorias.clear();
             Mostrar_productos.clear();
-        }
+        }    
         // Mostrar mensaje de resultado
         msg_alerta_producto.setText(resultado);
     } catch (Exception e) {
