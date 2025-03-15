@@ -1,7 +1,7 @@
 package co.edu.poli.ejemplo.controlador;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -117,10 +117,7 @@ public class MainController {
 
  @FXML
 void Crear_bd(ActionEvent event) {
-    //String rutaSQL = "C:/Users/LENOVO-02500100/Desktop/Andres/UNI/INGESOFT-2/Scrip sql/BD_script.sql";    //pc lenovo
-    String rutaSQL = "C:/Andres/Uni/INGESOFT-2/Scrip sql/BD_script.sql";   //Pc escritorio
-    //String rutaSQL = "C:/Andres/Uni/INGESOFT-2/Scrip sql/BD_script.sql";   //Pc mateo AGREGAR CON SU DIRECCION
-    crearBaseDeDatos(rutaSQL);
+    crearBaseDeDatos("Scrip sql/BD_script.sql");
 }
 
 private void crearBaseDeDatos(String rutaArchivo) {
@@ -163,15 +160,16 @@ private void crearBaseDeDatos(String rutaArchivo) {
 }
 
 
-private void ejecutarScriptSQL(Statement stmt, String rutaArchivo) {
+private void ejecutarScriptSQL(Statement stmt, String nombreArchivo) {
     try {
-        File sqlFile = new File(rutaArchivo);
-        if (!sqlFile.exists()) {
-            msg_alerta.setText("⚠ No se encontró el archivo SQL.");
+        // Buscar el archivo en la carpeta resources
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(nombreArchivo);
+        if (inputStream == null) {
+            msg_alerta.setText("⚠ No se encontró el archivo SQL en resources.");
             return;
         }
 
-        BufferedReader br = new BufferedReader(new FileReader(sqlFile));
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder sqlQuery = new StringBuilder();
         String line;
 
@@ -184,10 +182,12 @@ private void ejecutarScriptSQL(Statement stmt, String rutaArchivo) {
         }
 
         br.close();
+        msg_alerta.setText("✅ Tablas creadas correctamente.");
     } catch (Exception e) {
         msg_alerta.setText("❌ Error al ejecutar script SQL: " + e.getMessage());
     }
 }
+
 
 
 
