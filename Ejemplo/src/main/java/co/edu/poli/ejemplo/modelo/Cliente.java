@@ -45,10 +45,9 @@ public class Cliente {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Cliente{");
-        sb.append("id=").append(id);
-        sb.append(", nombre=").append(nombre);
-        sb.append('}');
+        sb.append("Cliente");
+        sb.append(" id: ").append(id);
+        sb.append(" nombre: ").append(nombre);
         return sb.toString();
     }
 

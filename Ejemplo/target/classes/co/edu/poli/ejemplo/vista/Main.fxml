@@ -1,244 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SplitMenuButton?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="448.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.ejemplo.controlador.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.ejemplo.controlador.MainController">
    <children>
-      <TabPane layoutY="6.0" prefHeight="448.0" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
-          <Tab text="Clientes">
+          <Tab text="Cliente">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
                      <children>
-                        <TabPane prefHeight="418.6666666666667" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <tabs>
-                            <Tab text="Administración">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <SplitPane dividerPositions="0.5" prefHeight="389.3333333333333" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <items>
-                                                <ToolBar orientation="VERTICAL">
-                                                  <items>
-                                                      <SplitMenuButton fx:id="seleccionClientesAdmin" mnemonicParsing="false" text="Seleccionar">
-                                                        <items>
-                                                          <MenuItem fx:id="itemCrearCliente" mnemonicParsing="false" onAction="#accionCrearCliente" text="Crear" />
-                                                          <MenuItem fx:id="itemEliminarCliente" mnemonicParsing="false" onAction="#accionEliminarCliente" text="Eliminar" />
-                                                            <MenuItem fx:id="itemActualizarCliente" mnemonicParsing="false" onAction="#accionActualizarCliente" text="Actualizar" />
-                                                        </items>
-                                                      </SplitMenuButton>
-                                                  </items>
-                                                </ToolBar>
-                                                <VBox>
-                                                   <children>
-                                                      <TextField fx:id="textClienteID" editable="false" promptText="ID" />
-                                                      <TextField fx:id="textClienteNombre" editable="false" promptText="Nombre" />
-                                                      <Button fx:id="botonConsultaClientes" mnemonicParsing="false" onAction="#accionConsultarClientes" prefHeight="25.0" prefWidth="71.0" text="Consultar" visible="false" />
-                                                      <Button fx:id="botonOkClientes" mnemonicParsing="false" onAction="#accionCompletarClientes" prefHeight="25.0" prefWidth="72.0" text="Ok" />
-                                                   </children>
-                                                </VBox>
-                                            </items>
-                                          </SplitPane>
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                            <Tab text="Consulta">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <SplitPane dividerPositions="0.5" prefHeight="389.3333333333333" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <items>
-                                                <ToolBar orientation="VERTICAL" prefHeight="392.0" prefWidth="101.0">
-                                                   <items>
-                                                      <SplitMenuButton fx:id="seleccionClientesConsulta" mnemonicParsing="false" text="Seleccionar">
-                                                        <items>
-                                                          <MenuItem fx:id="itemConsultarCliente" mnemonicParsing="false" onAction="#accionConsultaCliente" text="Consultar por ID" />
-                                                          <MenuItem fx:id="itemVerClientes" mnemonicParsing="false" onAction="#accionVerClientes" text="Ver todos" />
-                                                        </items>
-                                                      </SplitMenuButton>
-                                                      <TextField fx:id="textClienteConsulta" prefHeight="25.0" prefWidth="83.0" promptText="ID" visible="false" />
-                                                      <Button fx:id="botonClienteConsulta" mnemonicParsing="false" onAction="#accionBotonConsultaCliente" text="Ok" visible="false" />
-                                                   </items>
-                                                </ToolBar>
-                                                <TableView fx:id="tablaClientes" prefHeight="359.0" prefWidth="450.0">
-                                                  <columns>
-                                                    <TableColumn fx:id="colID" prefWidth="75.0" text="ID" />
-                                                    <TableColumn fx:id="colNombre" prefWidth="402.6666488647461" text="Nombre" />
-                                                  </columns>
-                                                </TableView>
-                                             </items>
-                                          </SplitPane>
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                          </tabs>
-                        </TabPane>
+                        <Button fx:id="btt_verCliente" layoutX="25.0" layoutY="13.0" mnemonicParsing="false" onAction="#ver_clientes" prefHeight="22.0" prefWidth="126.0" text="Ver clientes" />
+                        <Button fx:id="btt_crearCliente" layoutX="25.0" layoutY="47.0" mnemonicParsing="false" onAction="#crear_Cliente" prefHeight="26.0" prefWidth="126.0" text="Crear Cliente" />
+                        <Button fx:id="btt_eliminarCliente" layoutX="25.0" layoutY="81.0" mnemonicParsing="false" onAction="#eliminar_cliente" prefHeight="26.0" prefWidth="126.0" text="Eliminar Cliente" />
+                        <Button fx:id="btt_modificarCliente" layoutX="25.0" layoutY="118.0" mnemonicParsing="false" onAction="#actualizar_cliente" prefHeight="26.0" prefWidth="126.0" text="Modificar Cliente" />
+                        <Button fx:id="btt_salir" layoutX="25.0" layoutY="330.0" mnemonicParsing="false" onAction="#salir" prefHeight="26.0" prefWidth="126.0" text="Salir" />
+                        <TextField fx:id="txt_idCliente" layoutX="25.0" layoutY="241.0" />
+                        <TextField fx:id="txt_nombreCliente" layoutX="25.0" layoutY="294.0" />
+                        <Label layoutX="381.0" layoutY="15.0" text="Mostrar cliente" />
+                        <Label layoutX="408.0" layoutY="175.0" text="Alertas" />
+                        <Label fx:id="msg_alerta_cliente" layoutX="262.0" layoutY="240.0" prefHeight="108.0" prefWidth="318.0" style="-fx-background-color: ffffff;" wrapText="true" />
+                        <TextArea fx:id="label_mostrar_cliente" layoutX="263.0" layoutY="32.0" prefHeight="162.0" prefWidth="318.0" />
+                        <Label layoutX="75.0" layoutY="275.0" text="Nombre" />
+                        <Label layoutX="89.0" layoutY="220.0" text="id" />
+                        <Label layoutX="385.0" layoutY="220.0" text="Mensajes" />
+                        <Button fx:id="btt_encontrar_cliente_id" layoutX="26.0" layoutY="157.0" mnemonicParsing="false" onAction="#encontrar_cliente_id" prefHeight="26.0" prefWidth="126.0" text="Encontrar por id" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Productos">
+          <Tab text="Producto">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
                      <children>
-                        <TabPane prefHeight="418.6666666666667" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <tabs>
-                            <Tab text="Administración">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <SplitPane dividerPositions="0.5" prefHeight="389.3333333333333" prefWidth="598.0">
-                                             <items>
-                                                <ToolBar orientation="VERTICAL">
-                                                   <items>
-                                                      <SplitMenuButton fx:id="seleccionProductosAdmin" mnemonicParsing="false" text="Seleccionar">
-                                                         <items>
-                                                            <MenuItem fx:id="itemCrearProducto" mnemonicParsing="false" onAction="#accionCrearProducto" text="Crear" />
-                                                            <MenuItem fx:id="itemEliminarProducto" mnemonicParsing="false" onAction="#accionEliminarProducto" text="Eliminar" />
-                                                            <MenuItem fx:id="itemActualizarProducto" mnemonicParsing="false" onAction="#accionActualizarProducto" text="Actualizar" />
-                                                            <MenuItem fx:id="itemClonarProducto" mnemonicParsing="false" onAction="#accionClonarProducto" text="Clonar" />
-                                                         </items>
-                                                      </SplitMenuButton>
-                                                      <SplitMenuButton fx:id="seleccionTipoProducto" mnemonicParsing="false" text="Tipo de Producto" visible="false">
-                                                        <items>
-                                                          <MenuItem fx:id="itemTipoAlimento" mnemonicParsing="false" onAction="#accionTipoProductoAlimento" text="Alimento" />
-                                                          <MenuItem fx:id="itemTipoElectronico" mnemonicParsing="false" onAction="#accionTipoProductoElectronico" text="Electrónico" />
-                                                        </items>
-                                                      </SplitMenuButton>
-                                                   </items>
-                                                </ToolBar>
-                                                <VBox>
-                                                   <children>
-                                                      <TextField fx:id="textProductoID" editable="false" promptText="ID" />
-                                                      <TextField fx:id="textProductoDescripcion" editable="false" promptText="Descripción" />
-                                                      <TextField fx:id="textProductoPrecio" editable="false" promptText="Precio" />
-                                                      <TextField fx:id="textProductoExtra" promptText="Información adicional" />
-                                                      <Button fx:id="botonOkProductos" mnemonicParsing="false" onAction="#accionCompletarProductos" text="Ok" />
-                                                   </children>
-                                                </VBox>
-                                             </items>
-                                          </SplitPane>
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                            <Tab text="Consulta">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <SplitPane dividerPositions="0.5" prefHeight="389.3333333333333" prefWidth="598.0">
-                                             <items>
-                                                <ToolBar orientation="VERTICAL" prefHeight="392.0" prefWidth="101.0">
-                                                   <items>
-                                                      <SplitMenuButton fx:id="seleccionProductosConsulta" mnemonicParsing="false" text="Seleccionar">
-                                                         <items>
-                                                            <MenuItem fx:id="itemConsultarProducto" mnemonicParsing="false" onAction="#accionConsultaProducto" text="Consultar por ID" />
-                                                            <MenuItem fx:id="itemVerProductos" mnemonicParsing="false" onAction="#accionVerProductos" text="Ver todos" />
-                                                         </items>
-                                                      </SplitMenuButton>
-                                                      <TextField fx:id="textProductoConsulta" prefHeight="25.0" prefWidth="83.0" promptText="ID" visible="false" />
-                                                      <Button fx:id="botonProductoConsulta" mnemonicParsing="false" onAction="#accionBotonConsultaProducto" text="Ok" visible="false" />
-                                                   </items>
-                                                </ToolBar>
-                                                <TableView fx:id="tablaProductos" prefHeight="359.0" prefWidth="450.0">
-                                                   <columns>
-                                                      <TableColumn fx:id="colIDP" prefWidth="75.0" text="ID" />
-                                                      <TableColumn fx:id="colDes" prefWidth="75.0" text="Descripcion" />
-                                                      <TableColumn fx:id="colPrecio" prefWidth="75.0" text="Precio" />
-                                                      <TableColumn fx:id="colTipo" prefWidth="75.0" text="Tipo" />
-                                                      <TableColumn fx:id="colExtra" prefWidth="75.0" text="Información" />
-                                                   </columns>
-                                                </TableView>
-                                             </items>
-                                          </SplitPane>
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                          </tabs>
-                        </TabPane>
-                     </children>
-                  </AnchorPane>
+                        <TextArea fx:id="mostrar_clon" layoutX="176.0" layoutY="326.0" prefHeight="31.0" prefWidth="410.0" promptText="mostrar_clon" />
+                        <Button fx:id="clonar" layoutX="231.0" layoutY="293.0" mnemonicParsing="false" onAction="#clonar_producto" prefHeight="26.0" prefWidth="110.0" text="clonar aleatorio" />
+                        <TextArea fx:id="Mostrar_productos" layoutX="160.0" layoutY="29.0" prefHeight="67.0" prefWidth="424.0" />
+                        <Label layoutX="309.0" layoutY="10.0" text="Mostrar producto" />
+                        <Label layoutX="353.0" layoutY="98.0" text="Alertas" />
+                        <Label fx:id="msg_alerta_producto" layoutX="160.0" layoutY="116.0" prefHeight="26.0" prefWidth="420.0" style="-fx-background-color: ffffff;" />
+                        <Button fx:id="btt_verProducto" layoutX="14.0" layoutY="19.0" mnemonicParsing="false" onAction="#ver_producto_all" prefHeight="22.0" prefWidth="126.0" text="Ver Producto" />
+                        <Button fx:id="btt_crearProducto" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#crear_producto" prefHeight="26.0" prefWidth="126.0" text="Crear Producto" />
+                        <Button fx:id="btt_eliminarProducto" layoutX="14.0" layoutY="112.0" mnemonicParsing="false" onAction="#eliminar_producto" prefHeight="26.0" prefWidth="126.0" text="Eliminar Producto" />
+                        <Button fx:id="btt_modificarProducto" layoutX="14.0" layoutY="81.0" mnemonicParsing="false" onAction="#modificar_producto" prefHeight="26.0" prefWidth="126.0" text="Modificar Producto" />
+                        <TextField fx:id="txt_idProducto" layoutX="10.0" layoutY="220.0" />
+                        <TextField fx:id="txt_nombreProducto" layoutX="8.0" layoutY="263.0" />
+                        <TextField fx:id="txt_precioProducto" layoutX="8.0" layoutY="307.0" />
+                        <MenuButton fx:id="categoriaProducto" layoutX="8.0" layoutY="172.0" mnemonicParsing="false" onAction="#seleccionar_categoria_producto" prefHeight="26.0" prefWidth="148.0">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                        </MenuButton>
+                        <Button fx:id="btt_salir" layoutX="10.0" layoutY="340.0" mnemonicParsing="false" onAction="#salir" prefHeight="26.0" prefWidth="126.0" text="Salir" />
+                        <Label layoutX="72.0" layoutY="201.0" text="id" />
+                        <Label layoutX="45.0" layoutY="245.0" text="descripcion" />
+                        <Label layoutX="62.0" layoutY="289.0" text="Precio" />
+                        <Label layoutX="54.0" layoutY="154.0" text="categoria" />
+                        <Button fx:id="btt_encontrar_id" layoutX="161.0" layoutY="220.0" mnemonicParsing="false" onAction="#encontrar_por_id" text="Encontrar por Id" />
+                        <TextField fx:id="Precio_minimo" layoutX="422.0" layoutY="183.0" />
+                        <Label layoutX="342.0" layoutY="187.0" text="Precio minimo" />
+                        <Label layoutX="342.0" layoutY="227.0" text="Precio maximo" />
+                        <TextField fx:id="Precio_maximo" layoutX="422.0" layoutY="221.0" />
+                        <Button fx:id="btt_encontrar_precio" layoutX="445.0" layoutY="256.0" mnemonicParsing="false" onAction="#encontrar_por_precio" text="Rango de precio" />
+                        <TextField fx:id="voltaje_calorias" layoutX="161.0" layoutY="173.0" />
+                        <Label layoutX="181.0" layoutY="154.0" text="Voltaje - df calorico" />
+                        <Button fx:id="clonarporip" layoutX="362.0" layoutY="294.0" mnemonicParsing="false" onAction="#clonar_producto_ip" prefHeight="26.0" prefWidth="94.0" text="clonar por ip" />
+                     </children></AnchorPane>
             </content>
           </Tab>
-            <Tab text="Pedidos">
+            <Tab text="Pedido">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;" />
+              </content>
+            </Tab>
+            <Tab text="Conexion">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
                      <children>
-                        <TabPane prefHeight="418.6666666666667" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <tabs>
-                            <Tab text="Administración">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <SplitPane dividerPositions="0.5" prefHeight="389.3333333333333" prefWidth="598.0">
-                                             <items>
-                                                <ToolBar orientation="VERTICAL">
-                                                   <items>
-                                                      <SplitMenuButton mnemonicParsing="false" text="Seleccionar">
-                                                         <items>
-                                                            <MenuItem fx:id="itemCrearPedido" mnemonicParsing="false" text="Crear" />
-                                                            <MenuItem fx:id="itemEliminarPedido" mnemonicParsing="false" text="Eliminar" />
-                                                            <MenuItem fx:id="itemActualizarPedido" mnemonicParsing="false" text="Actualizar" />
-                                                         </items>
-                                                      </SplitMenuButton>
-                                                   </items>
-                                                </ToolBar>
-                                                <VBox>
-                                                   <children>
-                                                      <TextField fx:id="textNumeroPedido" editable="false" />
-                                                      <TextField fx:id="textFechaPedido" editable="false" />
-                                                      <TextField fx:id="textClientePedido" editable="false" />
-                                                      <Button fx:id="botonOkPedidos" mnemonicParsing="false" text="Ok" />
-                                                   </children>
-                                                </VBox>
-                                             </items>
-                                          </SplitPane>
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                            <Tab text="Consulta">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <SplitPane dividerPositions="0.5" prefHeight="389.3333333333333" prefWidth="598.0">
-                                             <items>
-                                                <ToolBar orientation="VERTICAL" prefHeight="392.0" prefWidth="101.0">
-                                                   <items>
-                                                      <Button fx:id="botonConsultarPedido" mnemonicParsing="false" text="Consulta por ID" />
-                                                      <Button fx:id="botonVerPedidos" mnemonicParsing="false" text="Ver todos" />
-                                                   </items>
-                                                </ToolBar>
-                                                <TableView prefHeight="359.0" prefWidth="450.0">
-                                                   <columns>
-                                                      <TableColumn prefWidth="75.0" text="Número" />
-                                                      <TableColumn prefWidth="75.0" text="Fecha" />
-                                                      <TableColumn prefWidth="75.0" text="Cliente" />
-                                                      <TableColumn prefWidth="75.0" text="Valor" />
-                                                   </columns>
-                                                </TableView>
-                                             </items>
-                                          </SplitPane>
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                          </tabs>
-                        </TabPane>
+                        <Button fx:id="probarConexion" layoutX="245.0" layoutY="168.0" mnemonicParsing="false" onAction="#ProbarConexion" prefHeight="34.0" prefWidth="110.0" text="Probar Conexion" />
+                        <Label fx:id="msg_alerta" layoutX="39.0" layoutY="48.0" prefHeight="111.0" prefWidth="519.0" style="-fx-background-color: ffffff;" text="Mensaje" />
                      </children>
                   </AnchorPane>
               </content>

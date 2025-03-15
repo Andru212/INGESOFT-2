@@ -1,7 +1,11 @@
 package co.edu.poli.ejemplo.controlador;
-
+import java.sql.Connection;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import javafx.util.Duration;
 import co.edu.poli.ejemplo.modelo.Cliente;
 import co.edu.poli.ejemplo.modelo.FactoryAlimento;
 import co.edu.poli.ejemplo.modelo.FactoryElectronico;
@@ -9,542 +13,637 @@ import co.edu.poli.ejemplo.modelo.Producto;
 import co.edu.poli.ejemplo.modelo.ProductoAlimentos;
 import co.edu.poli.ejemplo.modelo.ProductoElectronico;
 import co.edu.poli.ejemplo.modelo.ProductoFactory;
+import co.edu.poli.ejemplo.modelo.PrototipoProducto;
 import co.edu.poli.ejemplo.servicios.DAOCliente;
 import co.edu.poli.ejemplo.servicios.DAOProducto;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.util.Callback;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import co.edu.poli.ejemplo.servicios.Singleton;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-
 public class MainController {
-
-    private final Alert alerta;
-    DAOProducto daoProducto;
+    @FXML
+    private TextArea Mostrar_productos;
+    @FXML
+    private TextField Precio_maximo;
+    @FXML
+    private TextField Precio_minimo;
+    @FXML
+    private Button btt_crearCliente;
+    @FXML
+    private Button btt_crearProducto;
+    @FXML
+    private Button btt_eliminarCliente;
+    @FXML
+    private Button btt_eliminarProducto;
+    @FXML
+    private Button btt_encontrar_cliente_id;
+    @FXML
+    private Button btt_encontrar_id;
+    @FXML
+    private Button btt_encontrar_precio;
+    @FXML
+    private Button btt_modificarCliente;
+    @FXML
+    private Button btt_modificarProducto;
+    @FXML
+    private Button btt_salir;
+    @FXML
+    private Button btt_verCliente;
+    @FXML
+    private Button btt_verProducto;
+    @FXML
+    private MenuButton categoriaProducto;
+    @FXML
+    private Button clonar;
+    @FXML
+    private TextArea label_mostrar_cliente;
+    @FXML
+    private TextArea mostrar_clon;
+    @FXML
+    private Label msg_alerta;
+    @FXML
+    private Label msg_alerta_cliente;
+    @FXML
+    private Label msg_alerta_producto;
+    @FXML
+    private Button probarConexion;
+    @FXML
+    private TextField txt_idCliente;
+    @FXML
+    private TextField txt_idProducto;
+    @FXML
+    private TextField txt_nombreCliente;
+    @FXML
+    private TextField txt_nombreProducto;
+    @FXML
+    private TextField txt_precioProducto;
+    @FXML
+    private TextField voltaje_calorias;
+    @FXML
+    private Button clonarporip;
+    @FXML
+    void ProbarConexion(ActionEvent event) {
+            try {
+        Connection conn = Singleton.getConnection();
+        if (conn != null && !conn.isClosed()) {
+            msg_alerta.setText("✅ Conexión exitosa con la base de datos.");
+        } else {
+            msg_alerta.setText("⚠ No se pudo establecer la conexión.");
+        }
+    } catch (SQLException e) {
+        msg_alerta.setText("❌ Error de conexión: " + e.getMessage());
+    }
+    }
     private DAOCliente daoCliente;
-
     @FXML
-    private Button botonConsultarPedido, botonConsultaClientes, botonProductoConsulta,
-            botonOkClientes, botonOkPedidos, botonOkProductos, botonClienteConsulta,
-            botonVerClientes, botonVerPedidos;
-
-    @FXML
-    private MenuItem itemActualizarCliente, itemActualizarPedido, itemActualizarProducto,
-            itemClonarProducto, itemCrearCliente, itemCrearPedido, itemCrearProducto,
-            itemConsultarCliente, itemConsultarProducto,
-            itemVerProductos, itemVerClientes,
-            itemEliminarCliente, itemEliminarPedido, itemEliminarProducto;
-
-    @FXML
-    private SplitMenuButton seleccionClientesAdmin, seleccionClientesConsulta,
-            seleccionProductosConsulta, seleccionProductosAdmin, seleccionTipoProducto;
-    @FXML
-    private TextField textClienteID, textClienteNombre, textClientePedido,
-            textClienteConsulta, textFechaPedido, textNumeroPedido, textProductoConsulta,
-            textProductoDescripcion, textProductoPrecio, textProductoID, textProductoExtra;
-
-    @FXML
-    private TableView<Cliente> tablaClientes;
-    @FXML
-    private TableView<Producto> tablaProductos;
-    @FXML
-    private TableColumn<Cliente, String> colID, colNombre;
-    @FXML
-    private TableColumn<Producto, String> colIDP, colDes, colTipo, colExtra;
-    @FXML
-    private TableColumn<Producto, Float> colPrecio;
-
-    public MainController() {
-        this.alerta = new Alert(AlertType.NONE);
+public void initialize() {
+    try {
+        daoCliente = new DAOCliente(); // Asegurar conexión con la BD
+        cargar_categorias();
+    } catch (Exception e) {
+        label_mostrar_cliente.setText("⚠️ Error al conectar con la base de datos: " + e.getMessage());
     }
-
+}
+@FXML
+void ver_clientes() throws SQLException {
+label_mostrar_cliente.clear(); // Limpiar el área de texto antes de mostrar los datos
+msg_alerta_cliente.setText(""); // Limpiar mensajes previos
+DAOCliente daoCliente = new DAOCliente(); // Asegúrate de que tu DAOCliente tiene la conexión a la BD
+List<Cliente> clientes = daoCliente.readAll();
+if (clientes.isEmpty()) {
+    msg_alerta_cliente.setText("No hay clientes registrados.");
+    return;
+}
+StringBuilder sb = new StringBuilder();
+for (Cliente c : clientes) {
+    sb.append(c.toString()).append("\n"); // Usar el toString() de Cliente
+}
+label_mostrar_cliente.setText(sb.toString());
+}
     @FXML
-    void accionCrearCliente(ActionEvent event) {
-        textClienteID.clear();
-        textClienteNombre.clear();
-        botonConsultaClientes.setVisible(false);
-        textClienteID.setPromptText("Ingrese el ID del cliente a crear");
-        textClienteNombre.setPromptText("Ingrese el nombre del cliente a crear");
-        textClienteID.setEditable(true);
-        textClienteNombre.setEditable(true);
-        seleccionClientesAdmin.setText("Crear");
+    void actualizar_cliente() {
+ // Obtener datos de los campos de texto
+ String idCliente = txt_idCliente.getText().trim();
+ String nombreCliente = txt_nombreCliente.getText().trim();
+ // Validar que no estén vacíos
+ if (idCliente.isEmpty() || nombreCliente.isEmpty()) {
+     msg_alerta_cliente.setText("⚠️ Error: ID y Nombre no pueden estar vacíos.");
+     return;
+ }
+ // Crear objeto Cliente con el nuevo nombre
+ Cliente clienteActualizado = new Cliente();
+ clienteActualizado.setNombre(nombreCliente);
+ try {
+     // Llamar al método update del DAO
+     String resultado = daoCliente.update(idCliente, clienteActualizado);
+     // Mostrar resultado en el TextArea
+     label_mostrar_cliente.setText(resultado);
+ } catch (Exception e) {
+     msg_alerta_cliente.setText("⚠️ Error al actualizar cliente: " + e.getMessage());
+ }
     }
-
     @FXML
-    void accionCrearProducto(ActionEvent event) {
-        textProductoID.clear();
-        textProductoDescripcion.clear();
-        textProductoPrecio.clear();
-        textProductoExtra.clear();
-        seleccionProductosAdmin.setText("Crear");
-        textProductoID.setPromptText("Ingrese el ID del producto a crear");
-        textProductoDescripcion.setPromptText("Ingrese la descripción del producto a crear");
-        textProductoPrecio.setPromptText("Ingrese el precio del producto a crear");
-        textProductoExtra.setPromptText("Seleccione el tipo de producto a crear");
-        seleccionTipoProducto.setVisible(true);
-        textProductoID.setEditable(true);
-        textProductoDescripcion.setEditable(true);
-        textProductoPrecio.setEditable(true);
-        textProductoExtra.setEditable(true);
+    void crear_Cliente() throws SQLException {
+    // Obtener los datos ingresados desde los TextField
+    String idCliente = txt_idCliente.getText().trim();
+    String nombreCliente = txt_nombreCliente.getText().trim();
+    // Validar que los datos no estén vacíos
+    if (idCliente.isEmpty() || nombreCliente.isEmpty()) {
+        msg_alerta_cliente.setText("⚠️ Error: Ingrese todos los datos.");
+        return;
     }
-
-    @FXML
-    void accionActualizarProducto(ActionEvent event) {
-        textProductoID.clear();
-        textProductoDescripcion.clear();
-        textProductoPrecio.clear();
-        textProductoExtra.clear();
-        seleccionProductosAdmin.setText("Actualizar");
-        textProductoID.setPromptText("Ingrese el ID del producto a Actualizar");
-        textProductoDescripcion.setPromptText("Ingrese la descripción del producto a Actualizar");
-        textProductoPrecio.setPromptText("Ingrese el precio del producto a Actualizar");
-        seleccionTipoProducto.setVisible(false);
-        textProductoID.setEditable(true);
-        textProductoDescripcion.setEditable(true);
-        textProductoPrecio.setEditable(true);
-        textProductoExtra.setEditable(true);
+    // Crear objeto Cliente
+    Cliente nuevoCliente = new Cliente(idCliente, nombreCliente);
+    // Llamar al DAO para insertar en la base de datos
+    DAOCliente clienteDAO = new DAOCliente(); // Asegúrate de inicializar correctamente
+    String resultado = clienteDAO.create(nuevoCliente);
+    // Mostrar el resultado en la interfaz
+    if (resultado.startsWith("Error")) {
+        msg_alerta_cliente.setText("❌ " + resultado);
+    } else {
+        msg_alerta_cliente.setText("✅ Cliente registrado correctamente.");
+        label_mostrar_cliente.setText("Cliente creado:\nID: " + idCliente + "\nNombre: " + nombreCliente);
+        PauseTransition pausa = new PauseTransition(Duration.seconds(2));
+        pausa.setOnFinished(e -> {
+            try {
+                ver_clientes();
+            } catch (SQLException e1) {
+                msg_alerta_cliente.setText(e1.getMessage());
+            }
+        }); // Verificar que el método existe
+        pausa.play();
+        // Limpiar los campos después de la inserción
+        txt_idCliente.clear();
+        txt_nombreCliente.clear();
     }
-
-    @FXML
-    void accionEliminarProducto(ActionEvent event) {
-        textProductoID.clear();
-        textProductoDescripcion.clear();
-        textProductoPrecio.clear();
-        textProductoExtra.clear();
-        seleccionProductosAdmin.setText("Eliminar");
-        textProductoID.setPromptText("Ingrese el ID del producto a eliminar");
-        seleccionTipoProducto.setVisible(false);
-        textProductoID.setEditable(true);
-        textProductoDescripcion.setEditable(false);
-        textProductoPrecio.setEditable(false);
-        textProductoExtra.setEditable(false);
+        
     }
-
     @FXML
-    void accionClonarProducto(ActionEvent event) {
-        textProductoID.clear();
-        textProductoDescripcion.clear();
-        textProductoPrecio.clear();
-        textProductoExtra.clear();
-        seleccionProductosAdmin.setText("Clonar");
-        textProductoID.setPromptText("Ingrese el ID del producto a Clonar");
-        seleccionTipoProducto.setVisible(false);
-        textProductoID.setEditable(true);
-        textProductoDescripcion.setEditable(false);
-        textProductoPrecio.setEditable(false);
-        textProductoExtra.setEditable(false);
-    }
-
-    @FXML
-    void accionActualizarCliente(ActionEvent event) {
-        textClienteID.clear();
-        textClienteNombre.clear();
-        botonConsultaClientes.setVisible(true);
-        textClienteID.setPromptText("Ingrese el ID del cliente a actualizar");
-        textClienteID.setEditable(true);
-        textClienteNombre.setEditable(true);
-        seleccionClientesAdmin.setText("Actualizar");
-    }
-
-    @FXML
-    void accionEliminarCliente(ActionEvent event) {
-        textClienteID.clear();
-        textClienteNombre.clear();
-        botonConsultaClientes.setVisible(true);
-        textClienteID.setEditable(true);
-        textClienteNombre.setEditable(false);
-        textClienteID.setPromptText("Ingrese el ID del cliente a eliminar");
-        textClienteNombre.setPromptText("Nombre del cliente");
-        seleccionClientesAdmin.setText("Eliminar");
-    }
-
-    @FXML
-    void accionConsultaCliente(ActionEvent event) {
-        tablaClientes.getItems().clear();
-        textClienteConsulta.clear();
-        seleccionClientesConsulta.setText("Consulta por ID");
-        textClienteConsulta.setVisible(true);
-        botonClienteConsulta.setVisible(true);
-
-    }
-
-    @FXML
-    void accionConsultaProducto(ActionEvent event) {
-        tablaProductos.getItems().clear();
-        textProductoConsulta.clear();
-        seleccionProductosConsulta.setText("Consulta por ID");
-        textProductoConsulta.setVisible(true);
-        botonProductoConsulta.setVisible(true);
-
-    }
-
-    @FXML
-    void accionVerClientes(ActionEvent event) {
-        seleccionClientesConsulta.setText("Ver");
-        textClienteConsulta.setVisible(false);
-        botonClienteConsulta.setVisible(false);
-        colID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-
+    void eliminar_cliente() {
+// Obtener el ID del cliente
+String idCliente = txt_idCliente.getText().trim();
+// Validar que el ID no esté vacío
+if (idCliente.isEmpty()) {
+    msg_alerta_cliente.setText("⚠️ Error: Debe ingresar un ID para eliminar.");
+    return;
+}
+try {
+    // Intentar eliminar el cliente
+    String resultado = daoCliente.delete(idCliente);
+    // Mostrar mensaje en msg_alerta_cliente
+    label_mostrar_cliente.setText(resultado);
+    
+    PauseTransition pausa = new PauseTransition(Duration.seconds(2));
+    pausa.setOnFinished(e -> {
         try {
-            daoCliente = new DAOCliente();
-            ObservableList<Cliente> listaClientes = FXCollections.observableArrayList(daoCliente.readAll());
-            tablaClientes.setItems(listaClientes);
-        } catch (SQLException e) {
-            mostrarError(e.getMessage());
+            ver_clientes();
+        } catch (SQLException e1) {
+            msg_alerta_cliente.setText(e1.getMessage());
         }
-
+    }); // Verificar que el método existe
+    pausa.play();
+    // Limpiar campos después de la eliminación
+    txt_idCliente.clear();
+    txt_nombreCliente.clear();
+} catch (Exception e) {
+    msg_alerta_cliente.setText("⚠️ Error al eliminar cliente: " + e.getMessage());
+}
     }
-
     @FXML
-    void accionVerProductos(ActionEvent event) {
-        seleccionProductosConsulta.setText("Ver");
-        textProductoConsulta.setVisible(false);
-        botonProductoConsulta.setVisible(false);
-
-        // Configurar columnas básicas
-        colIDP.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colDes.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
-
+    void encontrar_cliente_id(ActionEvent event) {
+    // Obtener el ID ingresado por el usuario
+    String idCliente = txt_idCliente.getText().trim();
+    // Validar que el ID no esté vacío
+    if (idCliente.isEmpty()) {
+        msg_alerta_cliente.setText("⚠️ Error: Debe ingresar un ID para consultar.");
+        return;
+    }
+    try {
+        // Buscar cliente en la base de datos
+        Cliente cliente = daoCliente.read(idCliente);
+        if (cliente != null) {
+            // Mostrar la información del cliente en label_mostrar_cliente
+            label_mostrar_cliente.setText(cliente.toString());
+            msg_alerta_cliente.setText(""); // Limpiar mensajes de error
+        } else {
+            label_mostrar_cliente.setText("Cliente no encontrado.");
+            PauseTransition pausa = new PauseTransition(Duration.seconds(2));
+            pausa.setOnFinished(e -> {
+                try {
+                    ver_clientes();
+                    msg_alerta_cliente.setText("");
+                } catch (SQLException e1) {
+                    msg_alerta_cliente.setText(e1.getMessage());
+                }
+            }); // Verificar que el método existe
+            pausa.play();
+            msg_alerta_cliente.setText("⚠️ No se encontró un cliente con ese ID.");
+        }
+    } catch (Exception e) {
+        msg_alerta_cliente.setText("⚠️ Error al consultar cliente: " + e.getMessage());
+    }
+    }
+    @FXML
+    void ver_producto_all(ActionEvent event) {
         try {
-            daoProducto = new DAOProducto();
-            ObservableList<Producto> listaProductos = FXCollections.observableArrayList(daoProducto.readAll());
-
-            // Configurar columna de tipo
-            colTipo.setCellValueFactory(cellData
-                    -> new SimpleStringProperty(cellData.getValue() instanceof ProductoAlimentos ? "Alimento" : "Electrónico")
-            );
-
-            // Configurar columna extra
-            colExtra.setCellValueFactory(cellData -> {
-                Producto producto = cellData.getValue();
-                String extraInfo = "";
+            DAOProducto daoProducto = new DAOProducto();
+            List<Producto> listaProductos = daoProducto.readAll();
+    
+            if (listaProductos.isEmpty()) {
+                msg_alerta_producto.setText("⚠️ No hay productos registrados.");
+                return;
+            }
+    
+            StringBuilder resultado = new StringBuilder();
+            for (Producto producto : listaProductos) {
                 if (producto instanceof ProductoAlimentos) {
-                    extraInfo = ((ProductoAlimentos) producto).getAporteCalorico() + " kcal";
+                    ProductoAlimentos alimento = (ProductoAlimentos) producto;
+                    resultado.append(alimento.toString())
+                            .append(" | Calorías: ")
+                            .append(alimento.getAporteCalorico()).append(" kcal\n");
                 } else if (producto instanceof ProductoElectronico) {
-                    extraInfo = ((ProductoElectronico) producto).getVoltajeEntrada() + "V";
+                    ProductoElectronico electronico = (ProductoElectronico) producto;
+                    resultado.append(electronico.toString())
+                            .append(" | Voltaje: ")
+                            .append(electronico.getVoltajeEntrada()).append("V\n");
+                } else {
+                    resultado.append(producto.toString()).append("\n"); // En caso de ser otro tipo
                 }
-                return new SimpleStringProperty(extraInfo);
-            });
-
-            // Asignar la lista a la tabla
-            tablaProductos.setItems(listaProductos);
-        } catch (SQLException e) {
-            mostrarError("Error al obtener productos: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void mostrarAlerta(String mensaje) {
-        alerta.alertTypeProperty().set(AlertType.INFORMATION);
-        alerta.setTitle("Información");
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
-    }
-
-    private void mostrarError(String mensaje) {
-        alerta.alertTypeProperty().set(AlertType.ERROR);
-        alerta.setTitle("Error");
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
-    }
-
-    @FXML
-    void accionCompletarClientes(ActionEvent event) {
-
-        String opcionSeleccionada = seleccionClientesAdmin.getText(); // Obtener el texto actual del SplitMenuButton
-        String mensaje;
-        Cliente nuevoCliente;
-        try {
-            daoCliente = new DAOCliente();
-            switch (opcionSeleccionada) {
-                case "Crear":
-                    nuevoCliente = new Cliente();
-                    nuevoCliente.setId(textClienteID.getText());
-                    nuevoCliente.setNombre(textClienteNombre.getText());
-                    if (nuevoCliente.getId().isEmpty() || nuevoCliente.getNombre().isEmpty()) {
-                        mostrarAlerta("Por favor, complete todos los campos");
-                        return;
-                    }
-                    mensaje = daoCliente.create(nuevoCliente);
-                    if (mensaje.equals("Cliente creado exitosamente")) {
-                        mostrarAlerta(mensaje + " " + nuevoCliente.toString());
-                    } else {
-                        mostrarError(mensaje);
-                    }
-
-                    break;
-
-                case "Eliminar":
-                    mensaje = daoCliente.delete(textClienteID.getText());
-                    mostrarAlerta(mensaje);
-
-                    break;
-
-                case "Actualizar":
-                    nuevoCliente = new Cliente();
-                    nuevoCliente.setId(textClienteID.getText());
-                    nuevoCliente.setNombre(textClienteNombre.getText());
-                    mensaje = daoCliente.update(textClienteID.getText(), nuevoCliente);
-                    mostrarAlerta(mensaje);
-                    break;
-
-                default:
-                    mostrarAlerta("No has seleccionado ninguna opción");
-                    break;
             }
+    
+            // Mostrar productos en el TextArea
+            Mostrar_productos.setText(resultado.toString());
+            msg_alerta_producto.setText(""); // Limpiar mensajes de error
         } catch (Exception e) {
-            mostrarError(e.getMessage());
-
-        }
-
-    }
-
+            msg_alerta_producto.setText("⚠️ Error al obtener productos: " + e.getMessage());
+        }    }
     @FXML
-    void accionTipoProductoAlimento(ActionEvent event) {
-        textProductoID.clear();
-        textProductoDescripcion.clear();
-        textProductoPrecio.clear();
-        textProductoExtra.clear();
-        textProductoExtra.setPromptText("Ingrese el aporte calórico");
-        seleccionTipoProducto.setText("Alimento");
+    void crear_producto(ActionEvent event) {
+ // Obtener datos de los campos de texto
+    String idProducto = txt_idProducto.getText().trim();
+    String nombreProducto = txt_nombreProducto.getText().trim();
+    String precioTexto = txt_precioProducto.getText().trim();
+    String categoria = categoriaProducto.getText().trim();
+    String extraInfo = voltaje_calorias.getText().trim();
+    // Validar que los campos no estén vacíos
+    if (idProducto.isEmpty() || nombreProducto.isEmpty() || precioTexto.isEmpty() || categoria.isEmpty()) {
+        msg_alerta_producto.setText("⚠️ Error: Todos los campos son obligatorios.");
+        return;
     }
-
-    @FXML
-    void accionTipoProductoElectronico(ActionEvent event) {
-        textProductoID.clear();
-        textProductoDescripcion.clear();
-        textProductoPrecio.clear();
-        textProductoExtra.clear();
-        textProductoExtra.setPromptText("Ingrese el voltaje de entrada");
-        seleccionTipoProducto.setText("Electrónico");
-    }
-
-    @FXML
-    void accionCompletarProductos(ActionEvent event) {
-        try {
-            String opcionSeleccionada = seleccionProductosAdmin.getText(); // Obtener la opción del SplitMenuButton
-            String tipoProductoSeleccionado = seleccionTipoProducto.getText(); // Obtener el tipo de producto seleccionado
-            String mensaje;
-            daoProducto = new DAOProducto();
-            Producto producto;
-            ProductoFactory factory;
-            switch (opcionSeleccionada) {
-                case "Crear":
-                    if (tipoProductoSeleccionado.equals("Alimento")) {
-                        factory = new FactoryAlimento();
-                        producto = factory.crearProducto();
-                        ((ProductoAlimentos) producto).setId(textProductoID.getText());
-                        ((ProductoAlimentos) producto).setDescripcion(textProductoDescripcion.getText());
-                        ((ProductoAlimentos) producto).setPrecio(Float.parseFloat(textProductoPrecio.getText()));
-                        ((ProductoAlimentos) producto).setAporteCalorico(Float.parseFloat(textProductoExtra.getText()));
-                        mensaje = daoProducto.create(producto);
-                        mostrarAlerta(mensaje);
-                        break;
-                    } else {
-                        factory = new FactoryElectronico();
-                        producto = factory.crearProducto();
-                        ((ProductoElectronico) producto).setId(textProductoID.getText());
-                        ((ProductoElectronico) producto).setDescripcion(textProductoDescripcion.getText());
-                        ((ProductoElectronico) producto).setPrecio(Float.parseFloat(textProductoPrecio.getText()));
-                        ((ProductoElectronico) producto).setVoltajeEntrada(Float.parseFloat(textProductoExtra.getText()));
-                    }
-                    mensaje = daoProducto.create(producto);
-                    mostrarAlerta(mensaje);
-                    break;
-
-                case "Eliminar":
-                    mensaje = daoProducto.delete(textProductoID.getText());
-                    mostrarAlerta(mensaje);
-                    break;
-
-                case "Actualizar":
-                    try {
-                        // Obtener el producto existente desde la BD
-                        Producto productoExistente = daoProducto.read(textProductoID.getText());
-
-                        if (productoExistente == null) {
-                            mostrarAlerta("No se encontró un producto con ese ID para actualizar.");
-                            return;
-                        }
-
-                        // Identificar el tipo de producto
-                        if (productoExistente instanceof ProductoAlimentos) {
-                            ProductoAlimentos productoAlimento = (ProductoAlimentos) productoExistente;
-                            productoAlimento.setDescripcion(textProductoDescripcion.getText());
-                            productoAlimento.setPrecio(Double.parseDouble(textProductoPrecio.getText()));
-                            productoAlimento.setAporteCalorico(Float.parseFloat(textProductoExtra.getText()));
-                        } else if (productoExistente instanceof ProductoElectronico) {
-                            ProductoElectronico productoElectronico = (ProductoElectronico) productoExistente;
-                            productoElectronico.setDescripcion(textProductoDescripcion.getText());
-                            productoElectronico.setPrecio(Double.parseDouble(textProductoPrecio.getText()));
-                            productoElectronico.setVoltajeEntrada(Float.parseFloat(textProductoExtra.getText()));
-                        }
-
-                        // Intentar actualizar en la BD
-                        mensaje = daoProducto.update(textProductoID.getText(), productoExistente);
-                        mostrarAlerta(mensaje);
-                    } catch (Exception e) {
-                        mostrarError(e.getMessage());
-                    }
-                    break;
-
-                case "Clonar":
-                    Producto productoExistente = daoProducto.read(textProductoID.getText());
-                    if (productoExistente == null) {
-                        mostrarAlerta("No se encontró un producto con ese ID para clonar.");
-                        return;
-                    }
-                    Producto productoClonado;
-                    // Verificar el tipo y clonar adecuadamente
-                    if (productoExistente instanceof ProductoAlimentos) {
-                        productoClonado = (Producto) ((ProductoAlimentos) productoExistente).clonar();
-                    } else if (productoExistente instanceof ProductoElectronico) {
-                        productoClonado = (Producto) ((ProductoElectronico) productoExistente).clonar();
-                    } else {
-                        mostrarError("Error: Tipo de producto desconocido.");
-                        return;
-                    }
-                    String idBase = productoExistente.getId();
-                    int nuevoIdNumero = 1; // Empezar desde 1
-
-                    // Extraer la parte numérica si el ID termina en un número
-                    if (idBase.matches(".*\\d+$")) {
-                        nuevoIdNumero = Integer.parseInt(idBase.replaceAll("\\D+", "")) + 1; // Extrae números y suma 1
-                        idBase = idBase.replaceAll("\\d+$", ""); // Elimina los números finales
-                    }
-
-                    // Generar un nuevo ID hasta encontrar uno disponible
-                    String nuevoId;
-                    do {
-                        nuevoId = idBase + nuevoIdNumero;
-                        nuevoIdNumero++;
-                    } while (daoProducto.read(nuevoId) != null); // Verifica si el ID ya existe en la BD
-
-                    productoClonado.setId(nuevoId);
-
-                    // Intentar insertar en la base de datos
-                    daoProducto.create(productoClonado);
-                    mostrarAlerta("Producto clonado exitosamente con ID: " + productoClonado.getId());
-                    break;
-
-                default:
-                    mostrarAlerta("No has seleccionado ninguna opción");
-                    break;
+    try {
+        double precio = Double.parseDouble(precioTexto);
+        ProductoFactory factory = null;
+        Producto nuevoProducto = null;
+        // Usar la factoría según la categoría seleccionada
+        if (categoria.equalsIgnoreCase("Alimento")) {
+            if (extraInfo.isEmpty()) {
+                msg_alerta_producto.setText("⚠️ Error: Debe ingresar el aporte calórico.");
+                return;
             }
-        } catch (SQLException e) {
-            mostrarError(e.getMessage());
+            factory = new FactoryAlimento();
+            nuevoProducto = factory.crearProducto();
+            ((ProductoAlimentos) nuevoProducto).setId(idProducto);
+            ((ProductoAlimentos) nuevoProducto).setDescripcion(nombreProducto);
+            ((ProductoAlimentos) nuevoProducto).setPrecio(precio);
+            ((ProductoAlimentos) nuevoProducto).setAporteCalorico(Float.parseFloat(extraInfo));
+            
+        } else if (categoria.equalsIgnoreCase("Electrónico")) {
+            if (extraInfo.isEmpty()) {
+                msg_alerta_producto.setText("⚠️ Error: Debe ingresar el voltaje de entrada.");
+                return;
+            }
+            factory = new FactoryElectronico();
+            nuevoProducto = factory.crearProducto();
+            ((ProductoElectronico) nuevoProducto).setId(idProducto);
+            ((ProductoElectronico) nuevoProducto).setDescripcion(nombreProducto);
+            ((ProductoElectronico) nuevoProducto).setPrecio(precio);
+            ((ProductoElectronico) nuevoProducto).setVoltajeEntrada(Float.parseFloat(extraInfo));
+            
+        } else {
+            msg_alerta_producto.setText("⚠️ Error: Categoría no válida.");
+            return;
+        }
+        // Guardar en la base de datos
+        DAOProducto daoProducto = new DAOProducto();
+        String resultado = daoProducto.create(nuevoProducto);
+        // Mostrar resultado en la interfaz
+        msg_alerta_producto.setText(resultado);
+        // Limpiar campos tras agregar producto
+        txt_idProducto.clear();
+        txt_nombreProducto.clear();
+        txt_precioProducto.clear();
+        voltaje_calorias.clear();
+    } catch (NumberFormatException e) {
+        msg_alerta_producto.setText("⚠️ Error: El precio y valores extra deben ser números.");
+    } catch (Exception e) {
+        msg_alerta_producto.setText("⚠️ Error al agregar producto: " + e.getMessage());
+    }
+    }
+    @FXML
+    void eliminar_producto(ActionEvent event) {
+    // Obtener el ID del producto desde el campo de texto
+    String idProducto = txt_idProducto.getText().trim();
+    // Validar que el ID no esté vacío
+    if (idProducto.isEmpty()) {
+        msg_alerta_producto.setText("⚠️ Error: Debe ingresar un ID para eliminar.");
+        return;
+    }
+    try {
+        DAOProducto daoProducto = new DAOProducto();
+        String resultado = daoProducto.delete(idProducto);
+        // Si la eliminación fue exitosa, limpiar los campos
+        if (resultado.equals("Producto eliminado exitosamente")) {
+            txt_idProducto.clear();
+            txt_nombreProducto.clear();
+            txt_precioProducto.clear();
+            voltaje_calorias.clear();
+            Mostrar_productos.clear();
+        }
+        // Mostrar mensaje de resultado
+        msg_alerta_producto.setText(resultado);
+    } catch (Exception e) {
+        msg_alerta_producto.setText("⚠️ Error al eliminar producto: " + e.getMessage());
+    }
+    }
+    @FXML
+    void modificar_producto(ActionEvent event) {
+    // Obtener el ID del producto desde el campo de texto
+    String idProducto = txt_idProducto.getText().trim();
+    String descripcion = txt_nombreProducto.getText().trim();
+    String precioTexto = txt_precioProducto.getText().trim();
+    String extraTexto = voltaje_calorias.getText().trim();
+    String categoria = categoriaProducto.getText().trim(); // "Alimento" o "Electrónico"
+    // Validar que los campos obligatorios no estén vacíos
+    if (idProducto.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty() || extraTexto.isEmpty()) {
+        msg_alerta_producto.setText("⚠️ Error: Todos los campos deben estar completos.");
+        return;
+    }
+    try {
+        double precio = Double.parseDouble(precioTexto);
+        float extra = Float.parseFloat(extraTexto);
+        DAOProducto daoProducto = new DAOProducto();
+        Producto producto;
+        // Determinar el tipo de producto según la categoría seleccionada
+        if ("Alimento".equals(categoria)) {
+            producto = new ProductoAlimentos(idProducto, descripcion, precio, extra);
+        } else if ("Electrónico".equals(categoria)) {
+            producto = new ProductoElectronico(idProducto, descripcion, precio, extra);
+        } else {
+            msg_alerta_producto.setText("⚠️ Error: Categoría no válida.");
+            return;
+        }
+        // Llamar al método de actualización en el DAO
+        String resultado = daoProducto.update(idProducto, producto);
+        // Mostrar mensaje de confirmación o error
+        msg_alerta_producto.setText(resultado);
+    } catch (NumberFormatException e) {
+        msg_alerta_producto.setText("⚠️ Error: Precio y valor extra deben ser números válidos.");
+    } catch (Exception e) {
+        msg_alerta_producto.setText("⚠️ Error al actualizar producto: " + e.getMessage());
+    }
+    }
+    
+  
+    @FXML
+    void encontrar_por_id(ActionEvent event) {
+        try {
+            String id = txt_idProducto.getText().trim();
+    
+            // Validar que el ID no esté vacío
+            if (id.isEmpty()) {
+                msg_alerta_producto.setText("⚠️ Ingrese un ID de producto.");
+                return;
+            }
+    
+            DAOProducto daoProducto = new DAOProducto();
+            Producto producto = daoProducto.read(id);
+    
+            // Validar si el producto fue encontrado
+            if (producto == null) {
+                msg_alerta_producto.setText("⚠️ Producto no encontrado.");
+                Mostrar_productos.setText(""); // Limpiar el TextArea
+                return;
+            }
+    
+            // Construir la información a mostrar
+            StringBuilder resultado = new StringBuilder();
+            resultado.append("ID: ").append(producto.getId()).append("\n")
+                     .append("Descripción: ").append(producto.getDescripcion()).append("\n")
+                     .append("Precio: ").append(producto.getPrecio()).append("$\n");
+    
+            // Determinar tipo de producto y agregar dato extra
+            if (producto instanceof ProductoAlimentos) {
+                resultado.append("Categoría: Alimento\n");
+                resultado.append("Aporte calórico: ").append(((ProductoAlimentos) producto).getAporteCalorico()).append(" kcal\n");
+            } else if (producto instanceof ProductoElectronico) {
+                resultado.append("Categoría: Electrónico\n");
+                resultado.append("Voltaje de entrada: ").append(((ProductoElectronico) producto).getVoltajeEntrada()).append(" V\n");
+            } else {
+                resultado.append("Categoría: Desconocida\n");
+            }
+    
+            // Mostrar el resultado en el TextArea
+            Mostrar_productos.setText(resultado.toString());
+            msg_alerta_producto.setText(""); // Limpiar mensajes de error
+    
+        } catch (Exception e) {
+            msg_alerta_producto.setText("⚠️ Error al buscar producto: " + e.getMessage());
+        }
+    }
+    private String generarNuevoID() throws SQLException {
+    DAOProducto daoProducto = new DAOProducto();
+    List<Producto> productos = daoProducto.readAll();
+    // Crear una lista con todos los IDs numéricos
+    List<Integer> idsNumericos = new ArrayList<>();
+    for (Producto p : productos) {
+        try {
+            idsNumericos.add(Integer.parseInt(p.getId()));
+        } catch (NumberFormatException ignored) {
+            // Ignorar IDs no numéricos
+        }
+    }
+    // Ordenar los IDs numéricos
+    Collections.sort(idsNumericos);
+    // Buscar el primer hueco en la secuencia
+    int nuevoID = 1;  // Empezamos desde 1
+    for (int id : idsNumericos) {
+        if (id == nuevoID) {
+            nuevoID++;  // Si el número ya está en la lista, pasamos al siguiente
+        } else {
+            break;  // Si hay un hueco, lo usamos
+        }
+    }
+    return String.valueOf(nuevoID);  // Retornar el primer ID disponible
+    }
+    
+    @FXML
+    void clonar_producto(ActionEvent event) {
+        try {
+        DAOProducto daoProducto = new DAOProducto();
+        List<Producto> productos = daoProducto.readAll();
+        if (productos.isEmpty()) {
+            msg_alerta_producto.setText("⚠️ No hay productos para clonar.");
+            return;
+        }
+        // Seleccionar un producto aleatorio
+        Random rand = new Random();
+        Producto productoOriginal = productos.get(rand.nextInt(productos.size()));
+        // Clonar el producto si es una instancia de PrototipoProducto
+        if (!(productoOriginal instanceof PrototipoProducto)) {
+            msg_alerta_producto.setText("⚠️ Error: El producto no es clonable.");
+            return;
+        }
+        PrototipoProducto clon = ((PrototipoProducto) productoOriginal).clonar();
+        // Asignar un nuevo ID disponible
+        String nuevoId = generarNuevoID();
+        if (clon instanceof ProductoAlimentos) {
+            clon = new ProductoAlimentos(nuevoId, productoOriginal.getDescripcion(), productoOriginal.getPrecio(),
+                    ((ProductoAlimentos) productoOriginal).getAporteCalorico());
+        } else if (clon instanceof ProductoElectronico) {
+            clon = new ProductoElectronico(nuevoId, productoOriginal.getDescripcion(), productoOriginal.getPrecio(),
+                    ((ProductoElectronico) productoOriginal).getVoltajeEntrada());
+        }
+        // Guardar el clon en la base de datos
+        String resultado = daoProducto.create((Producto) clon);
+        // Mostrar el producto original en `Mostrar_productos`
+        Mostrar_productos.setText("Original: " + productoOriginal.toString());
+        // Mostrar el clon en `mostrar_clon`
+        mostrar_clon.setText("Clonado: " + clon.toString());
+        // Mensaje de éxito
+        msg_alerta_producto.setText(resultado);
+    } catch (Exception e) {
+        msg_alerta_producto.setText("⚠️ Error al clonar: " + e.getMessage());
+    }
+    }
+
+    @FXML
+    void clonar_producto_ip(ActionEvent event) {
+            try {
+                String idOriginal = txt_idProducto.getText().trim(); // ID ingresado
+        
+                if (idOriginal.isEmpty()) {
+                    msg_alerta_producto.setText("⚠️ Error: Debe ingresar un ID.");
+                    return;
+                }
+        
+                DAOProducto daoProducto = new DAOProducto();
+                Producto productoOriginal = daoProducto.read(idOriginal); // Buscar el producto
+        
+                if (productoOriginal == null) {
+                    msg_alerta_producto.setText("⚠️ Error: No se encontró un producto con ese ID.");
+                    return;
+                }
+        
+                if (!(productoOriginal instanceof PrototipoProducto)) {
+                    msg_alerta_producto.setText("⚠️ Error: El producto no es clonable.");
+                    return;
+                }
+        
+                // Clonar el producto
+                PrototipoProducto clon = ((PrototipoProducto) productoOriginal).clonar();
+        
+                // Asignar un nuevo ID disponible
+                String nuevoId = generarNuevoID();
+                if (clon instanceof ProductoAlimentos) {
+                    clon = new ProductoAlimentos(nuevoId, productoOriginal.getDescripcion(), productoOriginal.getPrecio(),
+                            ((ProductoAlimentos) productoOriginal).getAporteCalorico());
+                } else if (clon instanceof ProductoElectronico) {
+                    clon = new ProductoElectronico(nuevoId, productoOriginal.getDescripcion(), productoOriginal.getPrecio(),
+                            ((ProductoElectronico) productoOriginal).getVoltajeEntrada());
+                }
+        
+                // Guardar el clon en la base de datos
+                String resultado = daoProducto.create((Producto) clon);
+        
+                // Mostrar el producto original en `Mostrar_productos`
+                Mostrar_productos.setText("Original: " + productoOriginal.toString());
+        
+                // Mostrar el clon en `mostrar_clon`
+                mostrar_clon.setText("Clonado: " + clon.toString());
+        
+                // Mensaje de éxito
+                msg_alerta_producto.setText(resultado);
+        
+            } catch (Exception e) {
+                msg_alerta_producto.setText("⚠️ Error al clonar: " + e.getMessage());
+            }
+    }
+
+    @FXML
+    void encontrar_por_precio(ActionEvent event) {
+        String minPrecioTexto = Precio_minimo.getText().trim();
+        String maxPrecioTexto = Precio_maximo.getText().trim();
+    
+        // Validar que los campos no estén vacíos
+        if (minPrecioTexto.isEmpty() || maxPrecioTexto.isEmpty()) {
+            msg_alerta_producto.setText("⚠️ Error: Debes ingresar ambos valores de precio.");
+            return;
+        }
+    
+        try {
+            double precioMin = Double.parseDouble(minPrecioTexto);
+            double precioMax = Double.parseDouble(maxPrecioTexto);
+    
+            // Validar que el rango sea correcto
+            if (precioMin > precioMax) {
+                msg_alerta_producto.setText("⚠️ Error: El precio mínimo no puede ser mayor que el máximo.");
+                return;
+            }
+    
+            DAOProducto daoProducto = new DAOProducto();
+            List<Producto> listaProductos = daoProducto.leerPorRangoDePrecios(precioMin, precioMax);
+    
+            if (listaProductos.isEmpty()) {
+                msg_alerta_producto.setText("⚠️ No hay productos en ese rango de precios.");
+                Mostrar_productos.clear();
+                return;
+            }
+    
+            // Construir la lista de productos
+            StringBuilder resultado = new StringBuilder();
+            for (Producto producto : listaProductos) {
+                resultado.append(producto.toString()).append("\n");
+            }
+    
+            // Mostrar resultados en la interfaz
+            Mostrar_productos.setText(resultado.toString());
+            msg_alerta_producto.setText(""); // Limpiar mensajes de error
+    
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error en formato numérico. Verifica los datos ingresados.");
-        }
-    }
-
-    @FXML
-    void accionConsultarClientes(ActionEvent event) {
-        Cliente nuevoCliente;
-
-        try {
-            daoCliente = new DAOCliente();
-            nuevoCliente = daoCliente.read(textClienteID.getText());
-            if (nuevoCliente == null) {
-                mostrarAlerta("Cliente no encontrado");
-                return;
-            }
-            textClienteNombre.setText(nuevoCliente.getNombre());
+            msg_alerta_producto.setText("⚠️ Error: Ingrese valores numéricos válidos.");
         } catch (Exception e) {
-            mostrarError(e.getMessage());
+            msg_alerta_producto.setText("⚠️ Error al filtrar productos: " + e.getMessage());
         }
     }
-
     @FXML
-    void accionBotonConsultaCliente(ActionEvent event) {
-
-        try {
-            Cliente nuevoCliente;
-            daoCliente = new DAOCliente();
-            colID.setCellValueFactory(new PropertyValueFactory<>("id"));
-            colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-            nuevoCliente = daoCliente.read(textClienteConsulta.getText());
-            if (nuevoCliente == null) {
-                mostrarAlerta("Cliente no encontrado");
-                return;
-            }
-            // Crear la lista con el cliente encontrado
-            ObservableList<Cliente> listaClientes = FXCollections.observableArrayList(nuevoCliente);
-
-            // Asignar la lista a la tabla
-            tablaClientes.setItems(listaClientes);
-
-        } catch (Exception e) {
-            mostrarError(e.getMessage());
-        }
-
-    }
-
+void cargar_categorias() {
+    // Limpiar opciones previas
+    categoriaProducto.getItems().clear();
+    // Crear elementos de menú
+    MenuItem alimento = new MenuItem("Alimento");
+    MenuItem electronico = new MenuItem("Electrónico");
+    // Asignar evento de selección
+    alimento.setOnAction(this::seleccionar_categoria_producto);
+    electronico.setOnAction(this::seleccionar_categoria_producto);
+    // Agregar opciones al MenuButton
+    categoriaProducto.getItems().addAll(alimento, electronico);
+}
     @FXML
-    void accionBotonConsultaProducto(ActionEvent event) {
-        try {
-            daoProducto = new DAOProducto();
-
-            // Configurar columnas básicas
-            colIDP.setCellValueFactory(new PropertyValueFactory<>("id"));
-            colDes.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-            colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
-
-            // Buscar producto
-            Producto nuevoProducto = daoProducto.read(textProductoConsulta.getText());
-
-            if (nuevoProducto == null) {
-                mostrarAlerta("Producto no encontrado");
-                colTipo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue() instanceof ProductoAlimentos ? "Alimento" : "Electrónico"));
-            }
-
-            // Solución usando Callback para garantizar el tipo correcto
-            colTipo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Producto, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<Producto, String> cellData) {
-                    return new SimpleStringProperty(cellData.getValue() instanceof ProductoAlimentos ? "Alimento" : "Electrónico");
-                }
-            });
-
-            colExtra.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Producto, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<Producto, String> cellData) {
-                    Producto producto = cellData.getValue();
-                    String extraInfo = "";
-                    if (producto instanceof ProductoAlimentos) {
-                        extraInfo = ((ProductoAlimentos) producto).getAporteCalorico() + " kcal";
-                    } else if (producto instanceof ProductoElectronico) {
-                        extraInfo = ((ProductoElectronico) producto).getVoltajeEntrada() + "V";
-                    }
-                    return new SimpleStringProperty(extraInfo);
-                }
-            });
-
-            // Crear la lista con el producto encontrado
-            ObservableList<Producto> listaProductos = FXCollections.observableArrayList(nuevoProducto);
-
-            // Asignar la lista a la tabla
-            tablaProductos.setItems(listaProductos);
-
-        } catch (Exception e) {
-            mostrarError("Error al consultar producto: " + e.getMessage());
-            e.printStackTrace();
-        }
+    void seleccionar_categoria_producto(ActionEvent event) {
+        MenuItem item = (MenuItem) event.getSource();
+        categoriaProducto.setText(item.getText()); // Establecer la categoría seleccionada en el botón
+    
     }
-
+    @FXML
+    void salir(ActionEvent event) {
+        Platform.exit(); // Cierra la aplicación JavaFX
+        System.exit(0);  // Asegura que todos los procesos se detengan
+    }
 }
