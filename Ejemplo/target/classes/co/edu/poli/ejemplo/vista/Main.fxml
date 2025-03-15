@@ -120,6 +120,7 @@
                      <children>
                         <Button fx:id="probarConexion" layoutX="245.0" layoutY="168.0" mnemonicParsing="false" onAction="#ProbarConexion" prefHeight="34.0" prefWidth="110.0" text="Probar Conexion" />
                         <Label fx:id="msg_alerta" layoutX="39.0" layoutY="48.0" prefHeight="111.0" prefWidth="519.0" style="-fx-background-color: ffffff;" text="Mensaje" />
+                        <Button fx:id="CrearBD" layoutX="245.0" layoutY="218.0" mnemonicParsing="false" onAction="#Crear_bd" prefHeight="34.0" prefWidth="110.0" text="Crear BD" />
                      </children>
                   </AnchorPane>
               </content>
