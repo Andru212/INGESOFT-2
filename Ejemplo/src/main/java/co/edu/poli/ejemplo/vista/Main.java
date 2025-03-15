@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class Main extends Application {
-
+    
     private static Scene scene;
 
     @Override

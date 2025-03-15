@@ -117,14 +117,16 @@ public class MainController {
 
  @FXML
 void Crear_bd(ActionEvent event) {
-    String rutaSQL = "C:/Users/LENOVO-02500100/Desktop/Andres/UNI/INGESOFT-2/Scrip sql/BD_script.sql";
+    //String rutaSQL = "C:/Users/LENOVO-02500100/Desktop/Andres/UNI/INGESOFT-2/Scrip sql/BD_script.sql";    //pc lenovo
+    String rutaSQL = "C:/Andres/Uni/INGESOFT-2/Scrip sql/BD_script.sql";   //Pc escritorio
+    //String rutaSQL = "C:/Andres/Uni/INGESOFT-2/Scrip sql/BD_script.sql";   //Pc mateo AGREGAR CON SU DIRECCION
     crearBaseDeDatos(rutaSQL);
 }
 
 private void crearBaseDeDatos(String rutaArchivo) {
     try {
         ResourceBundle rd = ResourceBundle.getBundle("config");
-        String dbServer = rd.getString("db.server"); // Conexión sin BD específica
+        String dbServer = rd.getString("db.server"); // Sin base de datos específica
         String dbUSERNAME = rd.getString("db.username");
         String dbPASSWORD = rd.getString("db.password");
 
@@ -136,21 +138,30 @@ private void crearBaseDeDatos(String rutaArchivo) {
         if (rs.next()) {
             msg_alerta.setText("⚠ La base de datos ya existe.");
         } else {
-            // Si no existe, crearla y ejecutar el script
+            // Si no existe, crearla
             stmt.execute("CREATE DATABASE tienda;");
-            stmt.execute("USE tienda;");
-            
-            ejecutarScriptSQL(stmt, rutaArchivo);
             msg_alerta.setText("✅ Base de datos creada correctamente.");
         }
 
         rs.close();
         stmt.close();
         conn.close();
+
+        // 🔹🔹 AHORA NOS CONECTAMOS A LA BASE DE DATOS "TIENDA" 🔹🔹
+        String dbURL = dbServer + "tienda"; // Conectamos a la BD específica
+        conn = DriverManager.getConnection(dbURL, dbUSERNAME, dbPASSWORD);
+        stmt = conn.createStatement();
+
+        // Ejecutamos el script SQL
+        ejecutarScriptSQL(stmt, rutaArchivo);
+
+        stmt.close();
+        conn.close();
     } catch (Exception e) {
         msg_alerta.setText("❌ Error al crear la base de datos: " + e.getMessage());
     }
 }
+
 
 private void ejecutarScriptSQL(Statement stmt, String rutaArchivo) {
     try {
