@@ -1,31 +1,68 @@
-/* Cambiar el color de fondo de los botones */
 .button {
     -fx-background-color: #4ca1f7;
     -fx-text-fill: white;
     -fx-font-size: 14px;
-    -fx-transition: all 0.3s ease-in-out;
+    -fx-padding: 5px 10px;
+    -fx-min-width: 120px; /* Reducir el ancho */
+    -fx-max-width: 120px;
+    -fx-min-height: 30px;
+    -fx-max-height: 30px;
+    -fx-border-radius: 5px;
+    -fx-alignment: center;
 }
 
 .button:hover {
-    -fx-background-color: #2f01ad; /* Un verde más oscuro */
+    -fx-background-color: #2f01ad;
 }
 
+.hbox {
+    -fx-spacing: 10px; /* Añadir espacio entre los botones */
+    -fx-alignment: center;
+}
+
+.vbox {
+    -fx-spacing: 5px; /* Reducir la separación entre botones */
+    -fx-alignment: center;
+}
+
+/* Para que los botones no se desborden ni se superpongan */
+VBox {
+    -fx-spacing: 10px;  /* Espaciado entre botones */
+    -fx-alignment: center;
+}
+
+
+.button:pressed {
+    -fx-background-color: #1a0070;
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+/* Animación en TextField cuando se enfoca */
 .text-field {
     -fx-background-color: #f0f0f0;
     -fx-border-color: #cccccc;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
+    -fx-transition: all 0.3s ease-in-out;
 }
 
 .text-field:focused {
     -fx-border-color: #ff1e00;
     -fx-border-width: 3px;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(255, 30, 0, 0.4), 10, 0.5, 0, 0);
 }
 
-
-/* Estilo para los Labels */
+/* Estilo para los Labels con animación de opacidad */
 .label {
     background-color: transparent; /* Compatibilidad con validadores de CSS */
     -fx-font-weight: bold;
     -fx-font-size: 12px;
+    -fx-opacity: 0.9;
+    -fx-transition: opacity 0.3s ease-in-out;
+}
+
+.label:hover {
+    -fx-opacity: 1;
 }
