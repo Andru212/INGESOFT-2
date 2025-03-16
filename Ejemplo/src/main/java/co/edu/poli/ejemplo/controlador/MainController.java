@@ -133,15 +133,22 @@ private void crearBaseDeDatos(String rutaArchivo) {
         Connection conn = DriverManager.getConnection(dbServer, dbUSERNAME, dbPASSWORD);
         Statement stmt = conn.createStatement();
 
-        // Verificar si la base de datos ya existe
-        ResultSet rs = stmt.executeQuery("SHOW DATABASES LIKE 'tienda';");
+        ResultSet rs = stmt.executeQuery("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'tienda';");
+
         if (rs.next()) {
             msg_alerta.setText("⚠ La base de datos ya existe.");
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+            return;
         } else {
             // Si no existe, crearla
             stmt.execute("CREATE DATABASE tienda;");
             msg_alerta.setText("✅ Base de datos creada correctamente.");
         }
+        
 
         rs.close();
         stmt.close();
