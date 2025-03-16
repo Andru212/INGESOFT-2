@@ -1,0 +1,31 @@
+/* Cambiar el color de fondo de los botones */
+.button {
+    -fx-background-color: #4ca1f7;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.button:hover {
+    -fx-background-color: #2f01ad; /* Un verde más oscuro */
+}
+
+.text-field {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+.text-field:focused {
+    -fx-border-color: #ff1e00;
+    -fx-border-width: 3px;
+}
+
+
+/* Estilo para los Labels */
+.label {
+    background-color: transparent; /* Compatibilidad con validadores de CSS */
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}

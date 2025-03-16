@@ -36,6 +36,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
 public class MainController {
 
     @FXML
@@ -115,7 +116,9 @@ public class MainController {
     }    
     }
 
- @FXML
+     
+
+ @FXML 
 void Crear_bd(ActionEvent event) {
     crearBaseDeDatos("Scrip sql/BD_script.sql");
 }
@@ -197,10 +200,14 @@ public void initialize() {
     try {
         daoCliente = new DAOCliente(); // Asegurar conexión con la BD
         cargar_categorias();
+        
     } catch (Exception e) {
-        label_mostrar_cliente.setText("⚠️ Error al conectar con la base de datos: " + e.getMessage());
+        msg_alerta.setText("⚠️ Error al conectar con la base de datos: " + e.getMessage());
     }
 }
+
+ 
+
 @FXML
 void ver_clientes() throws SQLException {
 label_mostrar_cliente.clear(); // Limpiar el área de texto antes de mostrar los datos
