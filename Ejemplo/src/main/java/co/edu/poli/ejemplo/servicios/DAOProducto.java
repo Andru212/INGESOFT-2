@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import co.edu.poli.ejemplo.modelo.Producto;
@@ -188,4 +189,50 @@ public class DAOProducto implements DAOConsultasEspecializadas {
         return productos;
     }
 
+    public List<Producto> findByNames(List<String> nombres) throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+    
+        if (nombres.isEmpty()) {
+            return productos;
+        }
+    
+        String placeholders = String.join(",", Collections.nCopies(nombres.size(), "?"));
+        String sql = "SELECT p.id, p.descripcion, p.precio, a.aporte_calorico, e.voltaje_entrada FROM productos p "
+                + "LEFT JOIN productos_alimentos a ON p.id = a.id "
+                + "LEFT JOIN productos_electronicos e ON p.id = e.id "
+                + "WHERE p.descripcion IN (" + placeholders + ")";
+    
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            for (int i = 0; i < nombres.size(); i++) {
+                stmt.setString(i + 1, nombres.get(i));
+            }
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String id = rs.getString("id");
+                    String descripcion = rs.getString("descripcion");
+                    double precio = rs.getDouble("precio");
+                    Float aporteCalorico = rs.getObject("aporte_calorico", Float.class);
+                    Float voltajeEntrada = rs.getObject("voltaje_entrada", Float.class);
+    
+                    Producto producto = null;
+                    if (aporteCalorico != null) {
+                        producto = new ProductoAlimentos(id, descripcion, precio, aporteCalorico);
+                    } else if (voltajeEntrada != null) {
+                        producto = new ProductoElectronico(id, descripcion, precio, voltajeEntrada);
+                    }
+    
+                    if (producto != null) {
+                        productos.add(producto);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al leer productos por nombres", e);
+        }
+    
+        return productos;
+    }
+    
+    
 }

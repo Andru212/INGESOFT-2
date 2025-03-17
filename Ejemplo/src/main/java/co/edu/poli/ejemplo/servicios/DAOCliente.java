@@ -89,6 +89,27 @@ public class DAOCliente implements CRUD<Cliente, String, String> {
         return cliente;
     }
 
+   
+    public Cliente findByName(String nombre) {
+        String sql = "SELECT id, nombre FROM clientes WHERE nombre = ?";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Cliente(rs.getString("id"), rs.getString("nombre"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar cliente por nombre", e);
+        }
+        
+        return null; // Retorna null si no encuentra el cliente
+    }
+    
+    
+
     @Override
     public String update(String id, Cliente c) throws Exception {
         String sql = "UPDATE clientes SET nombre = ? WHERE id = ?";
@@ -119,4 +140,5 @@ public class DAOCliente implements CRUD<Cliente, String, String> {
         }
 
     }
+
 }

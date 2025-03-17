@@ -18,22 +18,30 @@ import javafx.util.Duration;
 import co.edu.poli.ejemplo.modelo.Cliente;
 import co.edu.poli.ejemplo.modelo.FactoryAlimento;
 import co.edu.poli.ejemplo.modelo.FactoryElectronico;
+import co.edu.poli.ejemplo.modelo.Pedido;
 import co.edu.poli.ejemplo.modelo.Producto;
 import co.edu.poli.ejemplo.modelo.ProductoAlimentos;
 import co.edu.poli.ejemplo.modelo.ProductoElectronico;
 import co.edu.poli.ejemplo.modelo.ProductoFactory;
 import co.edu.poli.ejemplo.modelo.PrototipoProducto;
 import co.edu.poli.ejemplo.servicios.DAOCliente;
+import co.edu.poli.ejemplo.servicios.DAOPedido;
 import co.edu.poli.ejemplo.servicios.DAOProducto;
 import co.edu.poli.ejemplo.servicios.Singleton;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -41,6 +49,44 @@ public class MainController {
 
     @FXML
     private Button CrearBD;
+
+
+
+
+    @FXML
+    private Label msg_alerta_pedido;
+
+    @FXML
+    private TextArea mostrar_pedidos;
+
+    @FXML
+    private Button btt_ver_pedidos;
+
+    @FXML
+    private Button btt_eliminar_pedido;
+
+    @FXML
+    private Button btt_actualizar_pedido;
+
+    @FXML
+    private Button btt_crear_pedido;
+
+    @FXML
+    private TextField Txt_numero_pedido;
+
+    @FXML
+    private DatePicker fecha_pedido;
+
+    @FXML
+    private ChoiceBox<String> Lista_clientes_pedido;
+
+    @FXML
+    private ListView<String> Lista_productos_pedido;
+
+    @FXML
+    private Button crear_pedido;
+
+
 
     @FXML
     private TextArea Mostrar_productos;
@@ -102,6 +148,28 @@ public class MainController {
     private TextField voltaje_calorias;
     @FXML
     private Button clonarporip;
+
+
+    private DAOProducto daoProducto;
+    private DAOPedido daoPedido;
+    private DAOCliente daoCliente;
+    @FXML
+public void initialize() {
+    try {
+        daoCliente = new DAOCliente(); // Asegurar conexión con la BD
+        daoProducto = new DAOProducto(); // Inicializar DAOProducto
+        daoPedido = new DAOPedido();
+        cargar_categorias();
+        initializeClientesChoiceBox();
+        initializeProductosListView();
+
+
+        
+    } catch (Exception e) {
+        msg_alerta.setText("⚠️ Error al conectar con la base de datos: " + e.getMessage());
+    }
+}
+
     @FXML
     void ProbarConexion(ActionEvent event) {
             try {
@@ -201,19 +269,33 @@ private void ejecutarScriptSQL(Statement stmt, String nombreArchivo) {
 
 
 
-    private DAOCliente daoCliente;
-    @FXML
-public void initialize() {
+
+    private void initializeProductosListView() {
+        try {
+            List<Producto> productos = daoProducto.readAll();
+            ObservableList<String> productosNombres = FXCollections.observableArrayList();
+            for (Producto producto : productos) {
+                productosNombres.add(producto.getDescripcion()); // Asumiendo que Producto tiene un método getDescripcion()
+            }
+            Lista_productos_pedido.setItems(productosNombres);
+            Lista_productos_pedido.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        } catch (Exception e) {
+            msg_alerta_pedido.setText(e.getMessage());
+        }
+    }
+ 
+private void initializeClientesChoiceBox() {
     try {
-        daoCliente = new DAOCliente(); // Asegurar conexión con la BD
-        cargar_categorias();
-        
+        List<Cliente> clientes = daoCliente.readAll();
+        ObservableList<String> clientesNombres = FXCollections.observableArrayList();
+        for (Cliente cliente : clientes) {
+            clientesNombres.add(cliente.getNombre()); // Asumiendo que Cliente tiene un método getNombre()
+        }
+        Lista_clientes_pedido.setItems(clientesNombres);
     } catch (Exception e) {
-        msg_alerta.setText("⚠️ Error al conectar con la base de datos: " + e.getMessage());
+        msg_alerta_pedido.setText(e.getMessage());
     }
 }
-
- 
 
 @FXML
 void ver_clientes() throws SQLException {
@@ -273,6 +355,7 @@ label_mostrar_cliente.setText(sb.toString());
         msg_alerta_cliente.setText("❌ " + resultado);
     } else {
         msg_alerta_cliente.setText("✅ Cliente registrado correctamente.");
+        initializeClientesChoiceBox();
         label_mostrar_cliente.setText("Cliente creado:\nID: " + idCliente + "\nNombre: " + nombreCliente);
         PauseTransition pausa = new PauseTransition(Duration.seconds(2));
         pausa.setOnFinished(e -> {
@@ -451,6 +534,7 @@ void ver_producto_all(ActionEvent event) {
         txt_nombreProducto.clear();
         txt_precioProducto.clear();
         voltaje_calorias.clear();
+        initializeProductosListView();
     } catch (NumberFormatException e) {
         msg_alerta_producto.setText("⚠️ Error: El precio y valores extra deben ser números.");
     } catch (Exception e) {
@@ -752,6 +836,138 @@ void cargar_categorias() {
         categoriaProducto.setText(item.getText()); // Establecer la categoría seleccionada en el botón
     
     }
+
+    @FXML
+    void crear_pedido(ActionEvent event) {
+ try {
+            String numero = Txt_numero_pedido.getText();
+            String fecha = fecha_pedido.getValue().toString();
+            String clienteNombre = Lista_clientes_pedido.getValue();
+            List<String> productosSeleccionados = Lista_productos_pedido.getSelectionModel().getSelectedItems();
+
+            if (numero.isEmpty() || fecha.isEmpty() || clienteNombre == null || productosSeleccionados.isEmpty()) {
+                msg_alerta_pedido.setText("Todos los campos son obligatorios.");
+                return;
+            }
+
+            Cliente cliente = daoCliente.findByName(clienteNombre);
+            List<Producto> productos = daoProducto.findByNames(productosSeleccionados);
+
+            if (cliente == null) {
+                msg_alerta_pedido.setText("Cliente no encontrado.");
+                return;
+            }
+
+            Pedido pedido = new Pedido(cliente, fecha, numero, productos);
+            String result = daoPedido.create(pedido);
+            msg_alerta_pedido.setText(result);
+            mostrar_pedidos.appendText("Pedido creado: " + numero + "\n");
+        } catch (Exception e) {
+            msg_alerta_pedido.setText("Error al crear pedido: " + e.getMessage());
+        }
+    }
+    
+
+    
+
+    @FXML
+    void actualizar_pedido(ActionEvent event) {
+        try {
+            String numero = Txt_numero_pedido.getText().trim();
+            String fecha = fecha_pedido.getValue().toString();
+            String clienteNombre = Lista_clientes_pedido.getValue();
+            List<String> productosSeleccionados = Lista_productos_pedido.getSelectionModel().getSelectedItems();
+    
+            if (numero.isEmpty() || fecha.isEmpty() || clienteNombre == null) {
+                msg_alerta_pedido.setText("Todos los campos son obligatorios.");
+                return;
+            }
+    
+            Cliente cliente = daoCliente.findByName(clienteNombre);
+            if (cliente == null) {
+                msg_alerta_pedido.setText("Cliente no encontrado.");
+                return;
+            }
+    
+            List<Producto> productos = daoProducto.findByNames(productosSeleccionados);
+            if (productos.isEmpty()) {
+                msg_alerta_pedido.setText("Debe seleccionar al menos un producto.");
+                return;
+            }
+    
+            Pedido pedidoActualizado = new Pedido(cliente, fecha, numero, productos);
+            String resultado = daoPedido.update(numero, pedidoActualizado);
+            msg_alerta_pedido.setText(resultado);
+    
+            // Refrescar la lista de pedidos después de actualizar
+            ver_pedidos(event);
+    
+        } catch (Exception e) {
+            msg_alerta_pedido.setText("Error al actualizar pedido: " + e.getMessage());
+        }
+    }
+    
+
+    
+    @FXML
+    void ver_pedidos(ActionEvent event) {
+        try {
+            List<Pedido> pedidos = daoPedido.readAll();
+            mostrar_pedidos.clear();
+    
+            if (pedidos.isEmpty()) {
+                msg_alerta_pedido.setText("No hay pedidos registrados.");
+                return;
+            }
+    
+            for (Pedido pedido : pedidos) {
+                mostrar_pedidos.appendText("Pedido N°: " + pedido.getNumero() + "\n");
+                mostrar_pedidos.appendText("Fecha: " + pedido.getFecha() + "\n");
+                mostrar_pedidos.appendText("Cliente: " + (pedido.getCliente() != null ? pedido.getCliente().getNombre() : "No asignado") + "\n");
+    
+                // Mostrar productos en líneas separadas
+                mostrar_pedidos.appendText("Productos:\n");
+                if (pedido.getProducto().isEmpty()) {
+                    mostrar_pedidos.appendText("  - Ninguno\n");
+                } else {
+                    for (Producto producto : pedido.getProducto()) {
+                        mostrar_pedidos.appendText("  - " + producto.getDescripcion());
+                        mostrar_pedidos.appendText("  - " + producto.getPrecio() + "\n");
+                    }
+                }
+    
+                mostrar_pedidos.appendText("---------------------------------\n");
+            }
+        } catch (Exception e) {
+            msg_alerta_pedido.setText("Error al cargar pedidos: " + e.getMessage());
+        }
+    }
+    
+        
+    
+
+    @FXML
+    void eliminar_pedido(ActionEvent event) {
+        try {
+            String numero = Txt_numero_pedido.getText().trim();
+            
+            if (numero.isEmpty()) {
+                msg_alerta_pedido.setText("Ingrese un número de pedido.");
+                return;
+            }
+    
+            String resultado = daoPedido.delete(numero);
+            msg_alerta_pedido.setText(resultado);
+    
+            // Refrescar la lista de pedidos después de eliminar
+            ver_pedidos(event);
+    
+        } catch (Exception e) {
+            msg_alerta_pedido.setText("Error al eliminar pedido: " + e.getMessage());
+        }
+    }
+    
+
     @FXML
     void salir(ActionEvent event) {
         Platform.exit(); // Cierra la aplicación JavaFX
