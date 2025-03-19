@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import co.edu.poli.ejemplo.modelo.AdaptadorPago;
 import co.edu.poli.ejemplo.modelo.Certificacion;
 import co.edu.poli.ejemplo.modelo.Cliente;
 import co.edu.poli.ejemplo.modelo.Evaluacion;
@@ -63,6 +64,13 @@ public class MainController {
     @FXML private TextField politica;
     @FXML private TextArea mostrar_proveedor;
     @FXML private Label alerta_proveedor;
+    @FXML private ChoiceBox<String> metodoPago;
+    @FXML private TextField txtnombrePago;
+    @FXML private TextField txtcorreoPago;
+    @FXML private Label lblresultadoPago;
+
+    @FXML
+    private Button btt_metodo_Pago;
     @FXML
     private Button btt_cerificacion;
     @FXML
@@ -178,7 +186,8 @@ public void initialize() {
         cargar_categorias();
         initializeClientesChoiceBox();
         initializeProductosListView();
-
+        metodoPago.getItems().addAll("Paypal", "Nequi");
+        metodoPago.setValue("Paypal"); // Valor por defecto
 
         
     } catch (Exception e) {
@@ -1034,4 +1043,27 @@ private ProveedorBuilder builder;
         Platform.exit(); // Cierra la aplicación JavaFX
         System.exit(0);  // Asegura que todos los procesos se detengan
     }
+
+    @FXML
+    public void procesarPago() {
+        String metodo = metodoPago.getValue();
+        String nombre = txtnombrePago.getText();
+        String correo = txtcorreoPago.getText();
+
+        if (nombre.isEmpty() || correo.isEmpty()) {
+            lblresultadoPago.setText("Por favor, completa todos los campos.");
+            return;
+        }
+
+        try {
+            // 🔹 Llamada a la clase AdaptadorPago
+            AdaptadorPago pago = new AdaptadorPago(metodo, nombre, correo);
+            pago.realizarPago();
+
+            lblresultadoPago.setText("Pago realizado con " + metodo);
+        } catch (Exception e) {
+            lblresultadoPago.setText("Error: " + e.getMessage());
+        }
+    }
+
 }
