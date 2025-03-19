@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import javafx.util.Duration;
 import co.edu.poli.ejemplo.modelo.Certificacion;
 import co.edu.poli.ejemplo.modelo.Cliente;
 import co.edu.poli.ejemplo.modelo.Evaluacion;
@@ -49,6 +48,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.util.Duration;
 
 public class MainController {
 
@@ -210,7 +210,7 @@ void Crear_bd(ActionEvent event) {
 private void crearBaseDeDatos(String rutaArchivo) {
     try {
         ResourceBundle rd = ResourceBundle.getBundle("config");
-        String dbServer = rd.getString("db.server"); // Sin base de datos específica
+        String dbServer = rd.getString("db.server");
         String dbUSERNAME = rd.getString("db.username");
         String dbPASSWORD = rd.getString("db.password");
 
