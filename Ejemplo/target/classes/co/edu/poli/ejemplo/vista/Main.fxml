@@ -159,10 +159,11 @@
                         <TextField fx:id="politica" layoutX="355.0" layoutY="210.0" text="Entrega en 48 horas" />
                         <Label layoutX="224.0" layoutY="192.0" text="Calificacion" />
                         <Label layoutX="400.0" layoutY="192.0" text="Politica" />
-                        <Button fx:id="btt_cerificacion" layoutX="34.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_certificacion" text="Certificacion" />
-                        <Button fx:id="btt_evaluacion" layoutX="196.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_evaluacion" text="Evaluacion" />
-                        <Button fx:id="btt_politicaentrega" layoutX="371.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_politicaentrega" text="PoliticaEntrega" />
+                        <Button fx:id="btt_cerificacion" layoutX="19.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_certificacion" text="Certificacion" />
+                        <Button fx:id="btt_evaluacion" layoutX="164.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_evaluacion" text="Evaluacion" />
+                        <Button fx:id="btt_politicaentrega" layoutX="311.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_politicaentrega" text="PoliticaEntrega" />
                         <Label fx:id="alerta_proveedor" layoutX="34.0" layoutY="321.0" prefHeight="18.0" prefWidth="485.0" style="-fx-background-color: ffffff;" text="Alertas" />
+                        <Button fx:id="btt_generarTodo" layoutX="460.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_todo" text="Generar todo" />
                      </children>
                   </AnchorPane>
               </content>

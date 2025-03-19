@@ -65,6 +65,9 @@ public class MainController {
     @FXML private Label alerta_proveedor;
     @FXML
     private Button btt_cerificacion;
+
+    @FXML
+    private Button btt_generarTodo;
     @FXML
     private Button btt_evaluacion;
     @FXML
@@ -983,51 +986,45 @@ void cargar_categorias() {
         }
     }
     
-private ProveedorBuilder builder;
+    private ProveedorBuilder builder;
 
     @FXML
     private void generar_certificacion() {
         builder = new Certificacion();
-        builder.setNombre(nombre_proveedor.getText());
-        builder.setRazonSocial(razon_social.getText());
-        builder.setCertificacion(certificacion.getText());
-
-        Proveedor proveedor = builder.build();
-        mostrar_proveedor.setText("Proveedor: " + proveedor.getNombre() +
-                                  "\nRazón Social: " + proveedor.getRazonSocial() +
-                                  "\nCertificación: " + proveedor.getCertificacion());
-
-        alerta_proveedor.setText("Certificación generada correctamente.");
+        construirProveedor();
     }
 
     @FXML
     private void generar_evaluacion() {
         builder = new Evaluacion();
-        builder.setNombre(nombre_proveedor.getText());
-        builder.setRazonSocial(razon_social.getText());
-        builder.setCalificacion(calificacion.getText());
-
-        Proveedor proveedor = builder.build();
-        mostrar_proveedor.setText("Proveedor: " + proveedor.getNombre() +
-                                  "\nRazón Social: " + proveedor.getRazonSocial() +
-                                  "\nCalificación: " + proveedor.getCalificacion());
-
-        alerta_proveedor.setText("Evaluación generada correctamente.");
+        construirProveedor();
     }
 
     @FXML
     private void generar_politicaentrega() {
         builder = new PoliticaEntrega();
-        builder.setNombre(nombre_proveedor.getText());
-        builder.setRazonSocial(razon_social.getText());
-        builder.setPoliticaEntrega(politica.getText());
+        construirProveedor();
+    }
 
-        Proveedor proveedor = builder.build();
-        mostrar_proveedor.setText("Proveedor: " + proveedor.getNombre() +
-                                  "\nRazón Social: " + proveedor.getRazonSocial() +
-                                  "\nPolítica de Entrega: " + proveedor.getPoliticaEntrega());
+    @FXML
+    private void generar_todo() {
 
-        alerta_proveedor.setText("Política de entrega generada correctamente.");
+    }
+
+    private void construirProveedor() {
+        try {
+            builder.setNombre(nombre_proveedor.getText());
+            builder.setRazonSocial(razon_social.getText());
+            builder.setCertificacion(certificacion.getText());
+            builder.setCalificacion(calificacion.getText());
+            builder.setPoliticaEntrega(politica.getText());
+
+            Proveedor proveedor = builder.build();
+            mostrar_proveedor.setText(proveedor.toString());
+            alerta_proveedor.setText("Proveedor generado exitosamente.");
+        } catch (Exception e) {
+            alerta_proveedor.setText("Error al generar el proveedor.");
+        }
     }
     @FXML
     void salir(ActionEvent event) {
