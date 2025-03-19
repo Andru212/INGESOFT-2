@@ -144,6 +144,29 @@
                   </AnchorPane>
               </content>
             </Tab>
+            <Tab text="Provedor">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
+                     <children>
+                        <TextArea fx:id="mostrar_proveedor" layoutX="19.0" layoutY="14.0" prefHeight="113.0" prefWidth="562.0" />
+                        <TextField fx:id="nombre_proveedor" layoutX="19.0" layoutY="151.0" text="Provedor A" />
+                        <TextField fx:id="razon_social" layoutX="184.0" layoutY="151.0" text="Empresa S.A." />
+                        <TextField fx:id="certificacion" layoutX="19.0" layoutY="211.0" text="ISO 9001" />
+                        <Label layoutX="70.0" layoutY="132.0" text="Nombre" />
+                        <Label layoutX="226.0" layoutY="132.0" text="Razon social" />
+                        <Label layoutX="59.0" layoutY="192.0" text="Certificacion" />
+                        <TextField fx:id="calificacion" layoutX="187.0" layoutY="210.0" text="4.5" />
+                        <TextField fx:id="politica" layoutX="355.0" layoutY="210.0" text="Entrega en 48 horas" />
+                        <Label layoutX="224.0" layoutY="192.0" text="Calificacion" />
+                        <Label layoutX="400.0" layoutY="192.0" text="Politica" />
+                        <Button fx:id="btt_cerificacion" layoutX="34.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_certificacion" text="Certificacion" />
+                        <Button fx:id="btt_evaluacion" layoutX="196.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_evaluacion" text="Evaluacion" />
+                        <Button fx:id="btt_politicaentrega" layoutX="371.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_politicaentrega" text="PoliticaEntrega" />
+                        <Label fx:id="alerta_proveedor" layoutX="34.0" layoutY="321.0" prefHeight="18.0" prefWidth="485.0" style="-fx-background-color: ffffff;" text="Alertas" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>

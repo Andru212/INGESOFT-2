@@ -15,15 +15,20 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 import javafx.util.Duration;
+import co.edu.poli.ejemplo.modelo.Certificacion;
 import co.edu.poli.ejemplo.modelo.Cliente;
+import co.edu.poli.ejemplo.modelo.Evaluacion;
 import co.edu.poli.ejemplo.modelo.FactoryAlimento;
 import co.edu.poli.ejemplo.modelo.FactoryElectronico;
 import co.edu.poli.ejemplo.modelo.Pedido;
+import co.edu.poli.ejemplo.modelo.PoliticaEntrega;
 import co.edu.poli.ejemplo.modelo.Producto;
 import co.edu.poli.ejemplo.modelo.ProductoAlimentos;
 import co.edu.poli.ejemplo.modelo.ProductoElectronico;
 import co.edu.poli.ejemplo.modelo.ProductoFactory;
 import co.edu.poli.ejemplo.modelo.PrototipoProducto;
+import co.edu.poli.ejemplo.modelo.Proveedor;
+import co.edu.poli.ejemplo.modelo.ProveedorBuilder;
 import co.edu.poli.ejemplo.servicios.DAOCliente;
 import co.edu.poli.ejemplo.servicios.DAOPedido;
 import co.edu.poli.ejemplo.servicios.DAOProducto;
@@ -51,8 +56,19 @@ public class MainController {
     private Button CrearBD;
 
 
-
-
+    @FXML private TextField nombre_proveedor;
+    @FXML private TextField razon_social;
+    @FXML private TextField certificacion;
+    @FXML private TextField calificacion;
+    @FXML private TextField politica;
+    @FXML private TextArea mostrar_proveedor;
+    @FXML private Label alerta_proveedor;
+    @FXML
+    private Button btt_cerificacion;
+    @FXML
+    private Button btt_evaluacion;
+    @FXML
+    private Button btt_politicaentrega;
     @FXML
     private Label msg_alerta_pedido;
 
@@ -967,7 +983,52 @@ void cargar_categorias() {
         }
     }
     
+private ProveedorBuilder builder;
 
+    @FXML
+    private void generar_certificacion() {
+        builder = new Certificacion();
+        builder.setNombre(nombre_proveedor.getText());
+        builder.setRazonSocial(razon_social.getText());
+        builder.setCertificacion(certificacion.getText());
+
+        Proveedor proveedor = builder.build();
+        mostrar_proveedor.setText("Proveedor: " + proveedor.getNombre() +
+                                  "\nRazón Social: " + proveedor.getRazonSocial() +
+                                  "\nCertificación: " + proveedor.getCertificacion());
+
+        alerta_proveedor.setText("Certificación generada correctamente.");
+    }
+
+    @FXML
+    private void generar_evaluacion() {
+        builder = new Evaluacion();
+        builder.setNombre(nombre_proveedor.getText());
+        builder.setRazonSocial(razon_social.getText());
+        builder.setCalificacion(calificacion.getText());
+
+        Proveedor proveedor = builder.build();
+        mostrar_proveedor.setText("Proveedor: " + proveedor.getNombre() +
+                                  "\nRazón Social: " + proveedor.getRazonSocial() +
+                                  "\nCalificación: " + proveedor.getCalificacion());
+
+        alerta_proveedor.setText("Evaluación generada correctamente.");
+    }
+
+    @FXML
+    private void generar_politicaentrega() {
+        builder = new PoliticaEntrega();
+        builder.setNombre(nombre_proveedor.getText());
+        builder.setRazonSocial(razon_social.getText());
+        builder.setPoliticaEntrega(politica.getText());
+
+        Proveedor proveedor = builder.build();
+        mostrar_proveedor.setText("Proveedor: " + proveedor.getNombre() +
+                                  "\nRazón Social: " + proveedor.getRazonSocial() +
+                                  "\nPolítica de Entrega: " + proveedor.getPoliticaEntrega());
+
+        alerta_proveedor.setText("Política de entrega generada correctamente.");
+    }
     @FXML
     void salir(ActionEvent event) {
         Platform.exit(); // Cierra la aplicación JavaFX
