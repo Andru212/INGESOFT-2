@@ -1038,6 +1038,9 @@ void cargar_categorias() {
         System.exit(0);  // Asegura que todos los procesos se detengan
     }
 
- 
+    @FXML
+    void procesarPago(){
+        
+    } 
 
 }

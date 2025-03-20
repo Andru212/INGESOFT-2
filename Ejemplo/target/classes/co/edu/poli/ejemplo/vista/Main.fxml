@@ -168,6 +168,31 @@
                   </AnchorPane>
               </content>
             </Tab>
+            <Tab text="Método de Pago">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="600.0" style="-fx-background-color: #ADD8E6;">
+            <children>
+                <!-- Etiqueta para el método de pago -->
+                <Label layoutX="30.0" layoutY="20.0" text="Selecciona método de pago:" />
+                <ChoiceBox fx:id="metodoPago" layoutX="200.0" layoutY="16.0" prefWidth="150.0" />
+
+                <!-- Etiqueta y campo para el nombre -->
+                <Label layoutX="30.0" layoutY="60.0" text="Nombre:" />
+                <TextField fx:id="txtnombrePago" layoutX="200.0" layoutY="56.0" prefWidth="250.0" />
+
+                <!-- Etiqueta y campo para el correo -->
+                <Label layoutX="30.0" layoutY="100.0" text="Correo:" />
+                <TextField fx:id="txtcorreoPago" layoutX="200.0" layoutY="96.0" prefWidth="250.0" />
+
+                <!-- Botón para procesar el pago -->
+                <Button fx:id="btnProcesarPago" layoutX="200.0" layoutY="140.0" mnemonicParsing="false" onAction="#procesarPago" prefHeight="34.0" prefWidth="150.0" text="Realizar Pago" />
+
+                <!-- Etiqueta para mostrar el resultado del pago -->
+                <Label fx:id="lblresultadoPago" layoutX="30.0" layoutY="190.0" prefWidth="520.0" style="-fx-background-color: #FFFFFF; -fx-padding: 5px;" text="Mensaje" />
+            </children>
+        </AnchorPane>
+    </content>
+</Tab>
         </tabs>
       </TabPane>
    </children>
