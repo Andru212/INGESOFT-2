@@ -15,20 +15,21 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 import co.edu.poli.ejemplo.modelo.AdaptadorPago;
-import co.edu.poli.ejemplo.modelo.Certificacion;
+
+
 import co.edu.poli.ejemplo.modelo.Cliente;
-import co.edu.poli.ejemplo.modelo.Evaluacion;
+
 import co.edu.poli.ejemplo.modelo.FactoryAlimento;
 import co.edu.poli.ejemplo.modelo.FactoryElectronico;
 import co.edu.poli.ejemplo.modelo.Pedido;
-import co.edu.poli.ejemplo.modelo.PoliticaEntrega;
+
 import co.edu.poli.ejemplo.modelo.Producto;
 import co.edu.poli.ejemplo.modelo.ProductoAlimentos;
 import co.edu.poli.ejemplo.modelo.ProductoElectronico;
 import co.edu.poli.ejemplo.modelo.ProductoFactory;
 import co.edu.poli.ejemplo.modelo.PrototipoProducto;
 import co.edu.poli.ejemplo.modelo.Proveedor;
-import co.edu.poli.ejemplo.modelo.ProveedorBuilder;
+
 import co.edu.poli.ejemplo.servicios.DAOCliente;
 import co.edu.poli.ejemplo.servicios.DAOPedido;
 import co.edu.poli.ejemplo.servicios.DAOProducto;
@@ -995,72 +996,48 @@ void cargar_categorias() {
         }
     }
     
-    private ProveedorBuilder builder;
+
 
     @FXML
     private void generar_certificacion() {
-        builder = new Certificacion();
-        construirProveedor();
+
     }
 
     @FXML
     private void generar_evaluacion() {
-        builder = new Evaluacion();
-        construirProveedor();
+
     }
 
     @FXML
     private void generar_politicaentrega() {
-        builder = new PoliticaEntrega();
-        construirProveedor();
+
     }
 
     @FXML
     private void generar_todo() {
-
-    }
-
-    private void construirProveedor() {
         try {
-            builder.setNombre(nombre_proveedor.getText());
-            builder.setRazonSocial(razon_social.getText());
-            builder.setCertificacion(certificacion.getText());
-            builder.setCalificacion(calificacion.getText());
-            builder.setPoliticaEntrega(politica.getText());
+            Proveedor proveedor = new Proveedor.Builder()
+                .setNombre(nombre_proveedor.getText())
+                .setRazonSocial(razon_social.getText())
+                .setCertificacion(certificacion.getText())
+                .setCalificacion(calificacion.getText())
+                .setPoliticaEntrega(politica.getText())
+                .build();
 
-            Proveedor proveedor = builder.build();
             mostrar_proveedor.setText(proveedor.toString());
             alerta_proveedor.setText("Proveedor generado exitosamente.");
         } catch (Exception e) {
             alerta_proveedor.setText("Error al generar el proveedor.");
         }
     }
+
+    
     @FXML
     void salir(ActionEvent event) {
         Platform.exit(); // Cierra la aplicación JavaFX
         System.exit(0);  // Asegura que todos los procesos se detengan
     }
 
-    @FXML
-    public void procesarPago() {
-        String metodo = metodoPago.getValue();
-        String nombre = txtnombrePago.getText();
-        String correo = txtcorreoPago.getText();
-
-        if (nombre.isEmpty() || correo.isEmpty()) {
-            lblresultadoPago.setText("Por favor, completa todos los campos.");
-            return;
-        }
-
-        try {
-            // 🔹 Llamada a la clase AdaptadorPago
-            AdaptadorPago pago = new AdaptadorPago(metodo, nombre, correo);
-            pago.realizarPago();
-
-            lblresultadoPago.setText("Pago realizado con " + metodo);
-        } catch (Exception e) {
-            lblresultadoPago.setText("Error: " + e.getMessage());
-        }
-    }
+ 
 
 }
