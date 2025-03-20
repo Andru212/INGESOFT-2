@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import co.edu.poli.ejemplo.modelo.AdaptadorNequi;
 import co.edu.poli.ejemplo.modelo.AdaptadorPago;
 
 
@@ -1039,8 +1040,35 @@ void cargar_categorias() {
     }
 
     @FXML
-    void procesarPago(){
-        
-    } 
+    public void procesarPago() {
+        String metodo = metodoPago.getValue();
+        String nombre = txtnombrePago.getText();
+        String correo = txtcorreoPago.getText();
+
+        if (nombre.isEmpty() || correo.isEmpty()) {
+            lblresultadoPago.setText("Por favor, completa todos los campos.");
+            return;
+        }
+
+        try {
+            if (metodo.equalsIgnoreCase("paypal")) {
+                AdaptadorPago pago = new AdaptadorPago(metodo, nombre, correo);
+                String resultado2= pago.realizarPago();
+
+            lblresultadoPago.setText("Pago realizado con " + metodo);
+            lblresultadoPago.setText(resultado2);
+            }  
+            else if (metodo.equalsIgnoreCase("nequi")) {
+                AdaptadorNequi pago = new AdaptadorNequi(metodo, nombre, correo);
+                String resultado = pago.realizarPago();
+    
+                lblresultadoPago.setText("Pago realizado con " + metodo);
+                lblresultadoPago.setText(resultado);
+
+            }
+        } catch (Exception e) {
+            lblresultadoPago.setText("Error: " + e.getMessage());
+        }
+    }
 
 }

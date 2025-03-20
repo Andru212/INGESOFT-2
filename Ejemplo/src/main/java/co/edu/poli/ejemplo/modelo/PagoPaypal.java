@@ -10,8 +10,8 @@ class PagoPaypal implements ProcesadorPago {
     }
 
     @Override
-    public void procesarPago() {
-        System.out.println("Pago procesado con PayPal.");
-        System.out.println(" Usuario: " + nombre + " | Email: " + correo);
+    public String procesarPago() {
+        return "Pago realizado con Paypal por " + nombre + " (" + correo + ")";
+
     }
 }
