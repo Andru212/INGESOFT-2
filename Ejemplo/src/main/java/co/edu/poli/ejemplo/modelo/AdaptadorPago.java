@@ -6,12 +6,14 @@ public class AdaptadorPago {
     public AdaptadorPago(String metodo, String nombre, String correo) {
         if (metodo.equalsIgnoreCase("paypal")) {
             procesador = new PagoPaypal(nombre, correo);
-        }  else {
+        } else if (metodo.equalsIgnoreCase("nequi")) {
+            procesador = new PagoNequi(nombre, correo);
+        } else {
             throw new IllegalArgumentException("Método de pago no soportado.");
         }
     }
 
-    public String realizarPago() {
-       return  procesador.procesarPago();
+    public void realizarPago() {
+        procesador.procesarPago();
     }
 }

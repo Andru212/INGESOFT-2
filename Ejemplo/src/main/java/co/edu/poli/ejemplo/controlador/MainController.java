@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import co.edu.poli.ejemplo.modelo.AdaptadorNequi;
 import co.edu.poli.ejemplo.modelo.AdaptadorPago;
 import co.edu.poli.ejemplo.modelo.Certificacion;
 import co.edu.poli.ejemplo.modelo.Cliente;
@@ -1057,21 +1056,11 @@ private ProveedorBuilder builder;
         }
 
         try {
-            if (metodo.equalsIgnoreCase("paypal")) {
-                AdaptadorPago pago = new AdaptadorPago(metodo, nombre, correo);
-                String resultado2= pago.realizarPago();
+            // 🔹 Llamada a la clase AdaptadorPago
+            AdaptadorPago pago = new AdaptadorPago(metodo, nombre, correo);
+            pago.realizarPago();
 
             lblresultadoPago.setText("Pago realizado con " + metodo);
-            lblresultadoPago.setText(resultado2);
-            }  
-            else if (metodo.equalsIgnoreCase("nequi")) {
-                AdaptadorNequi pago = new AdaptadorNequi(metodo, nombre, correo);
-                String resultado = pago.realizarPago();
-    
-                lblresultadoPago.setText("Pago realizado con " + metodo);
-                lblresultadoPago.setText(resultado);
-
-            }
         } catch (Exception e) {
             lblresultadoPago.setText("Error: " + e.getMessage());
         }

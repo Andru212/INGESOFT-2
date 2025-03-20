@@ -10,7 +10,8 @@ class PagoNequi implements ProcesadorPago {
     }
 
     @Override
-    public String procesarPago() {
-        return "Pago realizado con Nequi por " + nombre + " (" + correo + ")";
+    public void procesarPago() {
+        System.out.println("Pago procesado con Nequi.");
+        System.out.println("Usuario: " + nombre + " | Email: " + correo);
     }
 }
