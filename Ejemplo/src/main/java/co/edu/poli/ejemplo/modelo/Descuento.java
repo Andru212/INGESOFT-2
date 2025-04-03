@@ -1,20 +1,13 @@
 package co.edu.poli.ejemplo.modelo;
 
-public class Descuento extends ProductoDecorador {
-    private double porcentaje;
-
-    public Descuento(Producto producto, double porcentaje) {
-        super(producto);
-        this.porcentaje = porcentaje;
+// Decorador: Descuento del 20%
+class Descuento extends CarritoDecorador {
+    public Descuento(Carrito carrito) {
+        super(carrito);
     }
 
     @Override
-    public String getDescripcion() {
-        return productoDecorado.getDescripcion() + " con " + porcentaje + "% de descuento";
-    }
-
-    @Override
-    public double getPrecio() {
-        return productoDecorado.getPrecio() * (1 - porcentaje / 100);
+    public double calcularTotal() {
+        return carrito.calcularTotal() * 0.8; // Aplica un 20% de descuento
     }
 }

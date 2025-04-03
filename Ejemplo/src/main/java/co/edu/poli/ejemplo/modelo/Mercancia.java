@@ -1,6 +1,7 @@
 package co.edu.poli.ejemplo.modelo;
 
 abstract class Mercancia {
+    
     protected TipoEnvio tipoEnvio;
 
     public Mercancia(TipoEnvio tipoEnvio) {

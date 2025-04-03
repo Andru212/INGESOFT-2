@@ -1,18 +1,13 @@
 package co.edu.poli.ejemplo.modelo;
 
-// 📌 2. Decorador: Envío Gratis
-public class EnvioGratis extends ProductoDecorador {
-    public EnvioGratis(Producto producto) {
-        super(producto);
+// Decorador: Envío Gratis (descuento de 5 USD)
+class EnvioGratis extends CarritoDecorador {
+    public EnvioGratis(Carrito carrito) {
+        super(carrito);
     }
 
     @Override
-    public String getDescripcion() {
-        return productoDecorado.getDescripcion() + " con Envío Gratis";
-    }
-
-    @Override
-    public double getPrecio() {
-        return productoDecorado.getPrecio();
+    public double calcularTotal() {
+        return Math.max(0, carrito.calcularTotal() - 5); // Resta 5 USD
     }
 }
