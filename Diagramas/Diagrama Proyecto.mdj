@@ -1177,17 +1177,18 @@
 									"model": {
 										"$ref": "AAAAAAGWHPSxP1jWflU="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 692,
+									"left": 685,
 									"top": 331,
+									"width": 14.82177734375,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
 									"hostEdge": {
 										"$ref": "AAAAAAGWHPSxQFjZoTs="
 									},
-									"edgePosition": 2
+									"edgePosition": 2,
+									"text": "+1"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -1240,16 +1241,17 @@
 									"model": {
 										"$ref": "AAAAAAGWHPSxP1jXmS4="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 724,
+									"left": 717,
 									"top": 283,
+									"width": 14.82177734375,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
 									"hostEdge": {
 										"$ref": "AAAAAAGWHPSxQFjZoTs="
-									}
+									},
+									"text": "+1"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -1383,17 +1385,18 @@
 									"model": {
 										"$ref": "AAAAAAGWHPTChFkYugs="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 792,
+									"left": 785,
 									"top": 315,
+									"width": 14.82177734375,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
 									"hostEdge": {
 										"$ref": "AAAAAAGWHPTChFkcE80="
 									},
-									"edgePosition": 1
+									"edgePosition": 1,
+									"text": "+1"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -1446,17 +1449,18 @@
 									"model": {
 										"$ref": "AAAAAAGWHPTChFkZavQ="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 792,
+									"left": 785,
 									"top": 335,
+									"width": 14.82177734375,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
 									"hostEdge": {
 										"$ref": "AAAAAAGWHPTChFkcE80="
 									},
-									"edgePosition": 2
+									"edgePosition": 2,
+									"text": "+1"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -1715,17 +1719,18 @@
 									"model": {
 										"$ref": "AAAAAAGWHPTLyllrCtE="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 919,
+									"left": 912,
 									"top": 351,
+									"width": 14.82177734375,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
 									"hostEdge": {
 										"$ref": "AAAAAAGWHPTLy1lu4j0="
 									},
-									"edgePosition": 2
+									"edgePosition": 2,
+									"text": "+1"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -1778,16 +1783,17 @@
 									"model": {
 										"$ref": "AAAAAAGWHPTLyllsjNg="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 874,
+									"left": 867,
 									"top": 299,
+									"width": 14.82177734375,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
 									"hostEdge": {
 										"$ref": "AAAAAAGWHPTLy1lu4j0="
-									}
+									},
+									"text": "+1"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -1960,6 +1966,7 @@
 										"_parent": {
 											"$ref": "AAAAAAGWHPSxP1jVeKA="
 										},
+										"name": "1",
 										"reference": {
 											"$ref": "AAAAAAGWGxwUnr/cNbU="
 										}
@@ -1970,6 +1977,7 @@
 										"_parent": {
 											"$ref": "AAAAAAGWHPSxP1jVeKA="
 										},
+										"name": "1",
 										"reference": {
 											"$ref": "AAAAAAGWHARE3c415B4="
 										},
@@ -2038,6 +2046,7 @@
 										"_parent": {
 											"$ref": "AAAAAAGWHPTLyllqok0="
 										},
+										"name": "1",
 										"reference": {
 											"$ref": "AAAAAAGWGyC0pcCeIlI="
 										}
@@ -2048,6 +2057,7 @@
 										"_parent": {
 											"$ref": "AAAAAAGWHPTLyllqok0="
 										},
+										"name": "1",
 										"reference": {
 											"$ref": "AAAAAAGWHARE3c415B4="
 										},
@@ -2138,12 +2148,14 @@
 									"_parent": {
 										"$ref": "AAAAAAGWGyCc3cB0MxM="
 									},
+									"name": "1",
 									"end1": {
 										"_type": "UMLAssociationEnd",
 										"_id": "AAAAAAGWHPTChFkZavQ=",
 										"_parent": {
 											"$ref": "AAAAAAGWHPTChFkYugs="
 										},
+										"name": "1",
 										"reference": {
 											"$ref": "AAAAAAGWGyCc3cB0MxM="
 										}
