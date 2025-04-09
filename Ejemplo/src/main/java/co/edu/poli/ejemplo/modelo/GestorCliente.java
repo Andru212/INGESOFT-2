@@ -1,5 +1,9 @@
 package co.edu.poli.ejemplo.modelo;
 
+//esta es la fachada del patterns facade
+
+
+
 public class GestorCliente {
     private GestorInfoPersonal infoPersonal;
     private GestorPedidos pedidos;
