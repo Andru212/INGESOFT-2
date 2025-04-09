@@ -5,8 +5,7 @@ public class GestorInfoPersonal {
         return "Nombre: Juan Pérez\nDirección: Calle 123";
     }
 
-    public void actualizar(String nombre, String direccion) {
-        // Simular actualización
-        System.out.println("Actualizado: " + nombre + ", " + direccion);
+    public String actualizar(String nombre, String direccion) {
+        return "Actualizado: " + nombre + ", " + direccion;
     }
 }

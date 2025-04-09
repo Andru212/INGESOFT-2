@@ -15,24 +15,24 @@ public class GestorCliente {
         return infoPersonal.mostrar();
     }
 
-    public void actualizarInfo(String nombre, String direccion) {
-        infoPersonal.actualizar(nombre, direccion);
+    public String actualizarInfo(String nombre, String direccion) {
+        return infoPersonal.actualizar(nombre, direccion);
     }
 
     public String verHistorial() {
         return pedidos.verHistorial();
     }
 
-    public void realizarPedido(String pedido) {
-        pedidos.realizar(pedido);
+    public String realizarPedido(String pedido) {
+        return pedidos.realizar(pedido);
     }
 
     public String verPagos() {
         return pagos.verPagos();
     }
 
-    public void cambiarEstado(String metodo, boolean activo) {
-        pagos.cambiarEstado(metodo, activo);
+    public String cambiarEstado(String metodo, boolean activo) {
+        return pagos.cambiarEstado(metodo, activo);
     }
 }
 

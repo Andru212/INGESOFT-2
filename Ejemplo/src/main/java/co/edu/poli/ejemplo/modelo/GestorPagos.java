@@ -5,8 +5,8 @@ public class GestorPagos {
         return "Tarjeta de crédito\nNequi\nEfectivo";
     }
 
-    public void cambiarEstado(String metodo, boolean activo) {
-        System.out.println((activo ? "Activado" : "Bloqueado") + " método: " + metodo);
+    public String cambiarEstado(String metodo, boolean activo) {
+        return (activo ? "Activado" : "Bloqueado") + " método: " + metodo;
     }
 }
 
