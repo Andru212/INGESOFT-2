@@ -28,7 +28,7 @@ public class GestorCliente {
     }
 
     public String verPagos() {
-        return pagos.verFormas();
+        return pagos.verPagos();
     }
 
     public void cambiarEstado(String metodo, boolean activo) {

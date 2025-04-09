@@ -1,7 +1,7 @@
 package co.edu.poli.ejemplo.modelo;
 
 public class GestorPagos {
-    public String verFormas() {
+    public String verPagos() {
         return "Tarjeta de crédito\nNequi\nEfectivo";
     }
 
