@@ -37,6 +37,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.ejemplo.controlador.MainController">
@@ -52,6 +53,22 @@
                         <Button fx:id="btnVerPedidos" layoutX="466.0" layoutY="305.0" mnemonicParsing="false" onAction="#verPedidos" text="Ver Historial de Pedidos" />
                         <TextArea fx:id="txtResultado" layoutX="12.0" layoutY="32.0" prefHeight="163.0" prefWidth="574.0" />
                         <Label layoutX="14.0" layoutY="14.0" prefHeight="18.0" prefWidth="571.0" text="Gestión de Cliente" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Proxy">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="txtNombre" layoutX="24.0" layoutY="28.0" />
+                        <TextArea fx:id="txtResultado1" layoutX="24.0" layoutY="277.0" prefHeight="80.0" prefWidth="560.0" />
+                        <TextField fx:id="txtPrecio" layoutX="210.0" layoutY="115.0" />
+                        <TextField fx:id="txtNivelUsuario" layoutX="424.0" layoutY="202.0" />
+                        <Button fx:id="btnVerDetalles" layoutX="31.0" layoutY="217.0" mnemonicParsing="false" onAction="#VerDetallesProxy" text="VerDetalles" />
+                        <Label layoutX="47.0" layoutY="6.0" text="Nombre del producto" />
+                        <Label layoutX="248.0" layoutY="94.0" text="Ingresar precio" />
+                        <Label layoutX="445.0" layoutY="181.0" text="Nivel de autorizacion" />
                      </children>
                   </AnchorPane>
               </content>
