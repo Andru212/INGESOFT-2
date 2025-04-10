@@ -36,6 +36,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -73,6 +75,35 @@
                   </AnchorPane>
               </content>
             </Tab>
+<Tab text="flyweight">
+  <content>
+    <AnchorPane prefHeight="400.0" prefWidth="600.0">
+      <children>
+
+        <!-- Campos de entrada -->
+        <Label layoutX="20.0" layoutY="20.0" text="Nombre Producto:" />
+        <TextField fx:id="nombreProductoField" layoutX="140.0" layoutY="15.0" prefWidth="200.0" />
+
+        <Label layoutX="20.0" layoutY="60.0" text="Nombre Proveedor:" />
+        <TextField fx:id="nombreProveedorField" layoutX="140.0" layoutY="55.0" prefWidth="200.0" />
+
+        <Label layoutX="20.0" layoutY="100.0" text="Dirección Proveedor:" />
+        <TextField fx:id="direccionProveedorField" layoutX="140.0" layoutY="95.0" prefWidth="200.0" />
+
+        <!-- Botón para agregar producto -->
+        <Button fx:id="agregarProductoBtn" layoutX="140.0" layoutY="135.0" onAction="#agregarProducto" text="Agregar Producto" />
+                        <TableView fx:id="tablaProductos" layoutX="17.0" layoutY="193.0" prefHeight="150.0" prefWidth="563.0">
+                          <columns>
+                            <TableColumn fx:id="colNombreProducto" prefWidth="75.0" text="Producto" />
+                            <TableColumn fx:id="colNombreProveedor" prefWidth="75.0" text="Proveedor" />
+                              <TableColumn fx:id="colDireccionProveedor" prefWidth="75.0" text="Direccion" />
+                          </columns>
+                        </TableView>
+      </children>
+    </AnchorPane>
+  </content>
+</Tab>
+
          </tabs>
       </TabPane>
    </children>

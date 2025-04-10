@@ -2,11 +2,20 @@ package co.edu.poli.ejemplo.controlador;
 
 import co.edu.poli.ejemplo.modelo.GestorCliente;
 import co.edu.poli.ejemplo.modelo.IProducto;
+import co.edu.poli.ejemplo.modelo.Producto;
 import co.edu.poli.ejemplo.modelo.ProductoProxy;
 import co.edu.poli.ejemplo.modelo.ProductoReal;
+import co.edu.poli.ejemplo.modelo.Proveedor;
+import co.edu.poli.ejemplo.modelo.ProveedorFactory;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -33,11 +42,80 @@ public class MainController {
 
     private GestorCliente fachada;
 
+        @FXML
+    private TextField nombreProductoField;
+
+    @FXML
+    private TextField nombreProveedorField;
+
+    @FXML
+    private TextField direccionProveedorField;
+
+    @FXML
+    private Button agregarProductoBtn;
+
+    @FXML
+    private TableView<Producto> tablaProductos;
+
+    @FXML
+    private TableColumn<Producto, String> colNombreProducto;
+
+    @FXML
+    private TableColumn<Producto, String> colNombreProveedor;
+
+    @FXML
+    private TableColumn<Producto, String> colDireccionProveedor;
+
+
+        private final ObservableList<Producto> productos = FXCollections.observableArrayList();
+
     @FXML
     public void initialize() {
         fachada = new GestorCliente();
         txtResultado.setText(" Aplicación iniciada. Usa los botones para interactuar.");
+          colNombreProducto.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
+        colNombreProveedor.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProveedor().getNombre()));
+        colDireccionProveedor.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProveedor().getDireccion()));
+
+        // Cargar lista a la tabla
+        tablaProductos.setItems(productos);
     }
+
+    @FXML
+        private void agregarProducto() {
+        String nombreProducto = nombreProductoField.getText().trim();
+        String nombreProveedor = nombreProveedorField.getText().trim();
+        String direccionProveedor = direccionProveedorField.getText().trim();
+
+        if (nombreProducto.isEmpty() || nombreProveedor.isEmpty() || direccionProveedor.isEmpty()) {
+            mostrarAlerta("Todos los campos son obligatorios.");
+            return;
+        }
+
+        // Obtener proveedor desde el Flyweight
+        Proveedor proveedor = ProveedorFactory.getProveedor(nombreProveedor, direccionProveedor);
+
+        // Crear producto y agregarlo a la lista
+        Producto producto = new Producto(nombreProducto, proveedor);
+        productos.add(producto);
+
+        limpiarCampos();
+    }
+
+    private void limpiarCampos() {
+        nombreProductoField.clear();
+        nombreProveedorField.clear();
+        direccionProveedorField.clear();
+    }
+
+    private void mostrarAlerta(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.WARNING);
+        alerta.setTitle("Advertencia");
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
+    }
+
 
 @FXML
     void VerDetallesProxy() {
