@@ -1,5 +1,8 @@
 package com.example.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Producto.java
 public class Producto {
     private String nombre;
@@ -30,9 +33,44 @@ public class Producto {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+        notificar();
     }
-
+    
     public void setPrecioBase(double precioBase) {
         this.precioBase = precioBase;
+        notificar();
     }
+    
+
+    // MEMENTO
+    public ProductoMemento guardarEstado() {
+        return new ProductoMemento(nombre, precioBase);
+    }
+
+    public void restaurarEstado(ProductoMemento memento) {
+        if (memento != null) {
+            this.nombre = memento.getNombre();
+            this.precioBase = memento.getPrecioBase();
+        }
+    }
+
+        // Lista de observadores
+    private final List<Observer> observadores = new ArrayList<>();
+
+    public void agregarObservador(Observer o) {
+        observadores.add(o);
+    }
+
+    public void quitarObservador(Observer o) {
+        observadores.remove(o);
+    }
+
+    private void notificar() {
+        for (Observer o : observadores) {
+            o.actualizar(this);
+        }
+    }
+
+
+
 }
