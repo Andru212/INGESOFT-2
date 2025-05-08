@@ -2,13 +2,9 @@ package com.example.controlador;
 
 import com.example.modelo.DescuentoFijo;
 import com.example.modelo.DescuentoPorcentaje;
-import com.example.modelo.Historial;
 import com.example.modelo.PriceStrategy;
 import com.example.modelo.Producto;
-import com.example.modelo.ProductoMemento;
 import com.example.modelo.SinDescuento;
-import com.example.modelo.VistaLabel;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,17 +18,11 @@ public class MainController implements Initializable {
     @FXML
     private Button BttAplicar;
 
-    @FXML
-    private Button BttGuardarEstado;
-
-    @FXML
-    private Button BttRestaurarEstado;
 
     @FXML
     private Label MostrarFinal;
 
-    @FXML
-    private Label EstadoObserver;
+
 
     @FXML
     private TextField NombreProducto;
@@ -44,7 +34,7 @@ public class MainController implements Initializable {
     private ComboBox<String> Seleccion;
 
     private Producto producto;
-    private Historial historial;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -54,15 +44,7 @@ public class MainController implements Initializable {
         // Producto inicial con valores por defecto
         producto = new Producto("Producto", 0.0);
 
-        // Iniciar historial para Memento
-        historial = new Historial();
 
-        // Agregar observador que actualiza el Label EstadoObserver
-        VistaLabel vista = new VistaLabel(EstadoObserver);
-        producto.agregarObservador(vista);
-
-        // Disparar notificación inicial
-        producto.setNombre(producto.getNombre());
     }
 
     @FXML
@@ -100,20 +82,5 @@ public class MainController implements Initializable {
         }
     }
 
-    @FXML
-    void Guardar_estado(ActionEvent event) {
-        historial.guardar(producto.guardarEstado());
-        EstadoObserver.setText("Estado guardado");
-    }
 
-    @FXML
-    void RestaurarEstado(ActionEvent event) {
-        ProductoMemento estado = historial.deshacer();
-        if (estado != null) {
-            producto.restaurarEstado(estado);
-            EstadoObserver.setText("Estado restaurado");
-        } else {
-            EstadoObserver.setText("No hay estados guardados");
-        }
-    }
 }

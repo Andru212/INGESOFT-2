@@ -22,12 +22,7 @@
                   <Label layoutX="252.0" layoutY="21.0" text="Nombre Producto" />
                   <Label layoutX="269.0" layoutY="95.0" text="Precio Base" />
                   <Label layoutX="275.0" layoutY="168.0" text="Seleccion" />
-                  <Button fx:id="BttGuardarEstado" layoutX="46.0" layoutY="194.0" mnemonicParsing="false" onAction="#Guardar_estado" text="Guardar_Estado" />
-                  <Button fx:id="BttRestaurarEstado" layoutX="42.0" layoutY="235.0" mnemonicParsing="false" onAction="#RestaurarEstado" text="Restaurar_estado" />
-                  <Label layoutX="70.0" layoutY="168.0" text="Memento" />
                   <Label layoutX="273.0" layoutY="339.0" text="Estrategy" />
-                  <Label fx:id="EstadoObserver" layoutX="419.0" layoutY="197.0" prefHeight="107.0" prefWidth="170.0" style="-fx-background-color: cdcdcd;" text="Estado" />
-                  <Label layoutX="481.0" layoutY="168.0" text="Observer" />
                </children></AnchorPane>
       </content>
     </Tab>
