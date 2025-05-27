@@ -33,14 +33,11 @@
 -->
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -48,152 +45,66 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.ejemplo.controlador.MainController">
    <children>
       <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <tabs>
-          <Tab text="Cliente">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
-                     <children>
-                        <Button fx:id="btt_verCliente" layoutX="25.0" layoutY="13.0" mnemonicParsing="false" onAction="#ver_clientes" prefHeight="22.0" prefWidth="126.0" text="Ver clientes" />
-                        <Button fx:id="btt_crearCliente" layoutX="25.0" layoutY="47.0" mnemonicParsing="false" onAction="#crear_Cliente" prefHeight="26.0" prefWidth="126.0" text="Crear Cliente" />
-                        <Button fx:id="btt_eliminarCliente" layoutX="25.0" layoutY="81.0" mnemonicParsing="false" onAction="#eliminar_cliente" prefHeight="26.0" prefWidth="126.0" text="Eliminar Cliente" />
-                        <Button fx:id="btt_modificarCliente" layoutX="25.0" layoutY="118.0" mnemonicParsing="false" onAction="#actualizar_cliente" prefHeight="26.0" prefWidth="126.0" text="Modificar Cliente" />
-                        <Button fx:id="btt_salir" layoutX="25.0" layoutY="330.0" mnemonicParsing="false" onAction="#salir" prefHeight="26.0" prefWidth="126.0" text="Salir" />
-                        <TextField fx:id="txt_idCliente" layoutX="25.0" layoutY="241.0" />
-                        <TextField fx:id="txt_nombreCliente" layoutX="25.0" layoutY="294.0" />
-                        <Label layoutX="381.0" layoutY="15.0" text="Mostrar cliente" />
-                        <Label layoutX="408.0" layoutY="175.0" text="Alertas" />
-                        <Label fx:id="msg_alerta_cliente" layoutX="262.0" layoutY="240.0" prefHeight="108.0" prefWidth="318.0" style="-fx-background-color: ffffff;" wrapText="true" />
-                        <TextArea fx:id="label_mostrar_cliente" layoutX="263.0" layoutY="32.0" prefHeight="162.0" prefWidth="318.0" />
-                        <Label layoutX="75.0" layoutY="275.0" text="Nombre" />
-                        <Label layoutX="89.0" layoutY="220.0" text="id" />
-                        <Label layoutX="385.0" layoutY="220.0" text="Mensajes" />
-                        <Button fx:id="btt_encontrar_cliente_id" layoutX="26.0" layoutY="157.0" mnemonicParsing="false" onAction="#encontrar_cliente_id" prefHeight="26.0" prefWidth="126.0" text="Encontrar por id" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Producto">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
-                     <children>
-                        <TextArea fx:id="mostrar_clon" layoutX="176.0" layoutY="326.0" prefHeight="31.0" prefWidth="410.0" promptText="mostrar_clon" />
-                        <Button fx:id="clonar" layoutX="231.0" layoutY="293.0" mnemonicParsing="false" onAction="#clonar_producto" prefHeight="26.0" prefWidth="110.0" text="clonar aleatorio" />
-                        <TextArea fx:id="Mostrar_productos" layoutX="160.0" layoutY="29.0" prefHeight="67.0" prefWidth="424.0" />
-                        <Label layoutX="309.0" layoutY="10.0" text="Mostrar producto" />
-                        <Label layoutX="353.0" layoutY="98.0" text="Alertas" />
-                        <Label fx:id="msg_alerta_producto" layoutX="160.0" layoutY="116.0" prefHeight="26.0" prefWidth="420.0" style="-fx-background-color: ffffff;" />
-                        <Button fx:id="btt_verProducto" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#ver_producto_all" prefHeight="22.0" prefWidth="126.0" text="Ver Producto" />
-                        <Button fx:id="btt_crearProducto" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#crear_producto" prefHeight="26.0" prefWidth="126.0" text="Crear Producto" />
-                        <Button fx:id="btt_eliminarProducto" layoutX="14.0" layoutY="120.0" mnemonicParsing="false" onAction="#eliminar_producto" prefHeight="26.0" prefWidth="126.0" text="Eliminar Producto" />
-                        <Button fx:id="btt_modificarProducto" layoutX="14.0" layoutY="85.0" mnemonicParsing="false" onAction="#modificar_producto" prefHeight="26.0" prefWidth="126.0" text="Modificar Producto" />
-                        <TextField fx:id="txt_idProducto" layoutX="25.0" layoutY="220.0" prefHeight="26.0" prefWidth="106.0" />
-                        <TextField fx:id="txt_nombreProducto" layoutX="8.0" layoutY="263.0" />
-                        <TextField fx:id="txt_precioProducto" layoutX="8.0" layoutY="307.0" />
-                        <MenuButton fx:id="categoriaProducto" layoutX="8.0" layoutY="172.0" mnemonicParsing="false" onAction="#seleccionar_categoria_producto" prefHeight="26.0" prefWidth="148.0">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </MenuButton>
-                        <Button fx:id="btt_salir" layoutX="10.0" layoutY="340.0" mnemonicParsing="false" onAction="#salir" prefHeight="26.0" prefWidth="126.0" text="Salir" />
-                        <Label layoutX="72.0" layoutY="201.0" text="id" />
-                        <Label layoutX="45.0" layoutY="245.0" text="descripcion" />
-                        <Label layoutX="62.0" layoutY="289.0" text="Precio" />
-                        <Label layoutX="54.0" layoutY="154.0" text="categoria" />
-                        <Button fx:id="btt_encontrar_id" layoutX="141.0" layoutY="220.0" mnemonicParsing="false" onAction="#encontrar_por_id" prefHeight="26.0" prefWidth="114.0" text="Encontrar por Id" />
-                        <TextField fx:id="Precio_minimo" layoutX="422.0" layoutY="183.0" />
-                        <Label layoutX="342.0" layoutY="187.0" text="Precio minimo" />
-                        <Label layoutX="342.0" layoutY="227.0" text="Precio maximo" />
-                        <TextField fx:id="Precio_maximo" layoutX="422.0" layoutY="221.0" />
-                        <Button fx:id="btt_encontrar_precio" layoutX="437.0" layoutY="252.0" mnemonicParsing="false" onAction="#encontrar_por_precio" prefHeight="26.0" prefWidth="126.0" text="Rango de precio" />
-                        <TextField fx:id="voltaje_calorias" layoutX="161.0" layoutY="173.0" />
-                        <Label layoutX="181.0" layoutY="154.0" text="Voltaje - df calorico" />
-                        <Button fx:id="clonarporip" layoutX="362.0" layoutY="294.0" mnemonicParsing="false" onAction="#clonar_producto_ip" prefHeight="26.0" prefWidth="94.0" text="clonar por ip" />
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-            <Tab text="Pedido">
+         <tabs>
+            <Tab text="Fachada">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="Lista_productos_pedido" layoutX="14.0" layoutY="161.0" prefHeight="82.0" prefWidth="243.0" />
-                        <ChoiceBox fx:id="Lista_clientes_pedido" layoutX="14.0" layoutY="115.0" prefWidth="150.0" />
-                        <DatePicker fx:id="fecha_pedido" layoutX="17.0" layoutY="70.0" />
-                        <TextField fx:id="Txt_numero_pedido" layoutX="15.0" layoutY="25.0" />
-                        <Label layoutX="179.0" layoutY="31.0" text="Numero" />
-                        <Label layoutX="179.0" layoutY="119.0" text="Cliente" />
-                        <Label layoutX="106.0" layoutY="246.0" text="Productos" />
-                        <Button fx:id="btt_crear_pedido" layoutX="15.0" layoutY="275.0" mnemonicParsing="false" onAction="#crear_pedido" text="Crear" />
-                        <Button fx:id="btt_actualizar_pedido" layoutX="139.0" layoutY="275.0" mnemonicParsing="false" onAction="#actualizar_pedido" text="Actualizar" />
-                        <Button fx:id="btt_eliminar_pedido" layoutX="15.0" layoutY="315.0" mnemonicParsing="false" onAction="#eliminar_pedido" text="Eliminar" />
-                        <Button fx:id="btt_ver_pedidos" layoutX="387.0" layoutY="228.0" mnemonicParsing="false" onAction="#ver_pedidos" text="Ver" />
-                        <Label fx:id="msg_alerta_pedido" layoutX="155.0" layoutY="317.0" prefHeight="26.0" prefWidth="420.0" style="-fx-background-color: ffffff;" />
-                        <Label layoutX="329.0" layoutY="347.0" text="Alertas" />
-                        <TextArea fx:id="mostrar_pedidos" layoutX="269.0" layoutY="15.0" prefHeight="199.0" prefWidth="324.0" />
-                     </children></AnchorPane>
-              </content>
-            </Tab>
-            <Tab text="Conexion">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
-                     <children>
-                        <Button fx:id="probarConexion" layoutX="245.0" layoutY="168.0" mnemonicParsing="false" onAction="#ProbarConexion" prefHeight="34.0" prefWidth="110.0" text="Probar Conexion" />
-                        <Label fx:id="msg_alerta" layoutX="39.0" layoutY="48.0" prefHeight="111.0" prefWidth="519.0" style="-fx-background-color: ffffff;" text="Mensaje" />
-                        <Button fx:id="CrearBD" layoutX="245.0" layoutY="218.0" mnemonicParsing="false" onAction="#Crear_bd" prefHeight="34.0" prefWidth="110.0" text="Crear BD" />
+                        <Button fx:id="btnMostrarCliente" layoutX="14.0" layoutY="305.0" mnemonicParsing="false" onAction="#mostrarCliente" text="Mostrar Cliente" />
+                        <Button fx:id="btnActualizarCliente" layoutX="240.0" layoutY="305.0" maxWidth="182.0" mnemonicParsing="false" onAction="#actualizarCliente" prefHeight="30.0" prefWidth="182.0" text="Actualizar Cliente" />
+                        <Button fx:id="btnVerPedidos" layoutX="466.0" layoutY="305.0" mnemonicParsing="false" onAction="#verPedidos" text="Ver Historial de Pedidos" />
+                        <TextArea fx:id="txtResultado" layoutX="12.0" layoutY="32.0" prefHeight="163.0" prefWidth="574.0" />
+                        <Label layoutX="14.0" layoutY="14.0" prefHeight="18.0" prefWidth="571.0" text="Gestión de Cliente" />
                      </children>
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Provedor">
+            <Tab text="Proxy">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: ADD8E6;">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea fx:id="mostrar_proveedor" layoutX="19.0" layoutY="14.0" prefHeight="113.0" prefWidth="562.0" />
-                        <TextField fx:id="nombre_proveedor" layoutX="19.0" layoutY="151.0" text="Provedor A" />
-                        <TextField fx:id="razon_social" layoutX="184.0" layoutY="151.0" text="Empresa S.A." />
-                        <TextField fx:id="certificacion" layoutX="19.0" layoutY="211.0" text="ISO 9001" />
-                        <Label layoutX="70.0" layoutY="132.0" text="Nombre" />
-                        <Label layoutX="226.0" layoutY="132.0" text="Razon social" />
-                        <Label layoutX="59.0" layoutY="192.0" text="Certificacion" />
-                        <TextField fx:id="calificacion" layoutX="187.0" layoutY="210.0" text="4.5" />
-                        <TextField fx:id="politica" layoutX="355.0" layoutY="210.0" text="Entrega en 48 horas" />
-                        <Label layoutX="224.0" layoutY="192.0" text="Calificacion" />
-                        <Label layoutX="400.0" layoutY="192.0" text="Politica" />
-                        <Button fx:id="btt_cerificacion" layoutX="19.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_certificacion" text="Certificacion" />
-                        <Button fx:id="btt_evaluacion" layoutX="164.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_evaluacion" text="Evaluacion" />
-                        <Button fx:id="btt_politicaentrega" layoutX="311.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_politicaentrega" text="PoliticaEntrega" />
-                        <Label fx:id="alerta_proveedor" layoutX="34.0" layoutY="321.0" prefHeight="18.0" prefWidth="485.0" style="-fx-background-color: ffffff;" text="Alertas" />
-                        <Button fx:id="btt_generarTodo" layoutX="460.0" layoutY="262.0" mnemonicParsing="false" onAction="#generar_todo" text="Generar todo" />
+                        <TextField fx:id="txtNombre" layoutX="24.0" layoutY="28.0" />
+                        <TextArea fx:id="txtResultado1" layoutX="24.0" layoutY="277.0" prefHeight="80.0" prefWidth="560.0" />
+                        <TextField fx:id="txtPrecio" layoutX="210.0" layoutY="115.0" />
+                        <TextField fx:id="txtNivelUsuario" layoutX="424.0" layoutY="202.0" />
+                        <Button fx:id="btnVerDetalles" layoutX="31.0" layoutY="217.0" mnemonicParsing="false" onAction="#VerDetallesProxy" text="VerDetalles" />
+                        <Label layoutX="47.0" layoutY="6.0" text="Nombre del producto" />
+                        <Label layoutX="248.0" layoutY="94.0" text="Ingresar precio" />
+                        <Label layoutX="445.0" layoutY="181.0" text="Nivel de autorizacion" />
                      </children>
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Método de Pago">
-    <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="600.0" style="-fx-background-color: #ADD8E6;">
-            <children>
-                <!-- Etiqueta para el método de pago -->
-                <Label layoutX="30.0" layoutY="20.0" text="Selecciona método de pago:" />
-                <ChoiceBox fx:id="metodoPago" layoutX="200.0" layoutY="16.0" prefWidth="150.0" />
+<Tab text="flyweight">
+  <content>
+    <AnchorPane prefHeight="400.0" prefWidth="600.0">
+      <children>
 
-                <!-- Etiqueta y campo para el nombre -->
-                <Label layoutX="30.0" layoutY="60.0" text="Nombre:" />
-                <TextField fx:id="txtnombrePago" layoutX="200.0" layoutY="56.0" prefWidth="250.0" />
+        <!-- Campos de entrada -->
+        <Label layoutX="20.0" layoutY="20.0" text="Nombre Producto:" />
+        <TextField fx:id="nombreProductoField" layoutX="140.0" layoutY="15.0" prefWidth="200.0" />
 
-                <!-- Etiqueta y campo para el correo -->
-                <Label layoutX="30.0" layoutY="100.0" text="Correo:" />
-                <TextField fx:id="txtcorreoPago" layoutX="200.0" layoutY="96.0" prefWidth="250.0" />
+        <Label layoutX="20.0" layoutY="60.0" text="Nombre Proveedor:" />
+        <TextField fx:id="nombreProveedorField" layoutX="140.0" layoutY="55.0" prefWidth="200.0" />
 
-                <!-- Botón para procesar el pago -->
-                <Button fx:id="btnProcesarPago" layoutX="200.0" layoutY="140.0" mnemonicParsing="false" onAction="#procesarPago" prefHeight="34.0" prefWidth="150.0" text="Realizar Pago" />
+        <Label layoutX="20.0" layoutY="100.0" text="Dirección Proveedor:" />
+        <TextField fx:id="direccionProveedorField" layoutX="140.0" layoutY="95.0" prefWidth="200.0" />
 
-                <!-- Etiqueta para mostrar el resultado del pago -->
-                <Label fx:id="lblresultadoPago" layoutX="30.0" layoutY="190.0" prefWidth="520.0" style="-fx-background-color: #FFFFFF; -fx-padding: 5px;" text="Mensaje" />
-            </children>
-        </AnchorPane>
-    </content>
+        <!-- Botón para agregar producto -->
+        <Button fx:id="agregarProductoBtn" layoutX="140.0" layoutY="135.0" onAction="#agregarProducto" text="Agregar Producto" />
+                        <TableView fx:id="tablaProductos" layoutX="17.0" layoutY="193.0" prefHeight="150.0" prefWidth="563.0">
+                          <columns>
+                            <TableColumn fx:id="colNombreProducto" prefWidth="75.0" text="Producto" />
+                            <TableColumn fx:id="colNombreProveedor" prefWidth="75.0" text="Proveedor" />
+                              <TableColumn fx:id="colDireccionProveedor" prefWidth="75.0" text="Direccion" />
+                          </columns>
+                        </TableView>
+      </children>
+    </AnchorPane>
+  </content>
 </Tab>
-        </tabs>
+
+         </tabs>
       </TabPane>
    </children>
 </AnchorPane>

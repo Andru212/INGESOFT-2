@@ -1,47 +1,19 @@
 package co.edu.poli.ejemplo.modelo;
 
-public abstract class Producto{
+public class Producto {
+    private String nombre;
+    private Proveedor proveedor;
 
-    public Producto() {
+    public Producto(String nombre, Proveedor proveedor) {
+        this.nombre = nombre;
+        this.proveedor = proveedor;
     }
 
-    private String id;
-    private String descripcion;
-    private double precio;
-
-    public Producto(String id, String descripcion, double precio) {
-        this.id = id;
-        this.descripcion = descripcion;
-        this.precio = precio;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getId() {
-        return id;
+    public Proveedor getProveedor() {
+        return proveedor;
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    @Override
-    public String toString() {
-        return "Producto " + id + " Descripcion: " + descripcion + " precio: " + precio;
-    }
-
 }
